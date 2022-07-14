@@ -1,14 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
-
 function LocationMap() {
   const [toggle, setToggle] = useState(true);
   const current = new Date();
-  
+
   return (
     <section className="company-location-hours m-bottom--32">
       <h5 className="font--bold m-bottom--16">Location & hour</h5>
@@ -27,62 +23,16 @@ function LocationMap() {
           {toggle ? (
             <p
               className={
-                (returnString(current)[0] ? 'color--green' : 'color--red') +
+                (isOpen(current)[0] ? 'color--green' : 'color--red') +
                 ' font--bold'
               }
             >
-              {returnString(current)}{' '}
+              {isOpen(current)}{' '}
             </p>
           ) : (
             <dl className="open-hours-table m-bottom--16">
               {tempDate.map((el, index) => {
-                if (el.length === 2) {
-                  return (
-                    <div className='m-bottom--8' key={index}>
-                      <dt
-                        className={classNames(
-                          index === current.getDay() &&
-                            'font--bold color--green'
-                        )}
-                        key={el[0]}
-                      >
-                        {el[0]}
-                      </dt>
-                      <dd
-                        className={classNames(
-                          index === current.getDay() &&
-                            'font--bold color--green'
-                        )}
-                        key={20 + index}
-                      >
-                        {el[1]}
-                      </dd>
-                    </div>
-                  );
-                } else {
-                  return (
-                    <div className='m-bottom--8' key={index}>
-                      <dt
-                        className={classNames(
-                          index === current.getDay() &&
-                            'font--bold color--green'
-                        )}
-                        key={el[0]}
-                      >
-                        {el[0]}
-                      </dt>
-                      <dd
-                        className={classNames(
-                          index === current.getDay() &&
-                            'font--bold color--green'
-                        )}
-                        key={20 + index}
-                      >
-                        {el[1] + ' AM - ' + el[2] + ' PM'}
-                      </dd>
-                    </div>
-                  );
-                }
+                return openHours(el, index, current);
               })}
             </dl>
           )}
@@ -108,7 +58,7 @@ const tempDate = [
   ['Sat', '9:00', '5:00'],
 ];
 
-const returnString = (current) => {
+const isOpen = (current) => {
   const cur = tempDate[current.getDay()];
 
   if (cur.length === 2) {
@@ -129,6 +79,23 @@ const returnString = (current) => {
   } else {
     return [false, 'Close now'];
   }
+};
+
+const openHours = (el, index, current) => {
+  return (
+    <div className="m-bottom--8" key={index}>
+      <dt
+        className={index === current.getDay() ? 'font--bold color--green' : ' '}
+      >
+        {el[0]}
+      </dt>
+      <dd
+        className={index === current.getDay() ? 'font--bold color--green' : ' '}
+      >
+        {el.length === 2 ? el[1] : el[1] + ' AM - ' + el[2] + ' PM'}
+      </dd>
+    </div>
+  );
 };
 
 export default LocationMap;
