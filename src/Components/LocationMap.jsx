@@ -8,6 +8,7 @@ function classNames(...classes) {
 function LocationMap() {
   const [toggle, setToggle] = useState(true);
   const current = new Date();
+  
   return (
     <section className="company-location-hours m-bottom--32">
       <h5 className="font--bold m-bottom--16">Location & hour</h5>
@@ -37,12 +38,13 @@ function LocationMap() {
               {tempDate.map((el, index) => {
                 if (el.length === 2) {
                   return (
-                    <>
+                    <div className='m-bottom--8' key={index}>
                       <dt
                         className={classNames(
                           index === current.getDay() &&
                             'font--bold color--green'
                         )}
+                        key={el[0]}
                       >
                         {el[0]}
                       </dt>
@@ -51,19 +53,21 @@ function LocationMap() {
                           index === current.getDay() &&
                             'font--bold color--green'
                         )}
+                        key={20 + index}
                       >
                         {el[1]}
                       </dd>
-                    </>
+                    </div>
                   );
                 } else {
                   return (
-                    <>
+                    <div className='m-bottom--8' key={index}>
                       <dt
                         className={classNames(
                           index === current.getDay() &&
                             'font--bold color--green'
                         )}
+                        key={el[0]}
                       >
                         {el[0]}
                       </dt>
@@ -72,10 +76,11 @@ function LocationMap() {
                           index === current.getDay() &&
                             'font--bold color--green'
                         )}
+                        key={20 + index}
                       >
                         {el[1] + ' AM - ' + el[2] + ' PM'}
                       </dd>
-                    </>
+                    </div>
                   );
                 }
               })}

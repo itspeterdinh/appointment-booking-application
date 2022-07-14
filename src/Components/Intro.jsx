@@ -42,7 +42,7 @@ function Intro() {
       <p className="m-bottom--32">
         {toggle
           ? test2
-          : test3.map((el) => {
+          : test3.map((el, index) => {
               return (
                 <>
                   {el}
