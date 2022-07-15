@@ -81,16 +81,28 @@ const isOpen = (current) => {
   }
 };
 
+const classNames = (...classes) => {
+  return classes.filter(Boolean).join(' ');
+};
+
 const openHours = (el, index, current) => {
   return (
     <div className="m-bottom--8" key={index}>
       <dt
-        className={index === current.getDay() ? 'font--bold color--green' : ' '}
+        className={classNames(
+          index === current.getDay() && isOpen(current)[0] && 'color--green',
+          index === current.getDay() && !isOpen(current)[0] && 'color--red',
+          'font--bold'
+        )}
       >
         {el[0]}
       </dt>
       <dd
-        className={index === current.getDay() ? 'font--bold color--green' : ' '}
+        className={classNames(
+          index === current.getDay() && isOpen(current)[0] && 'color--green',
+          index === current.getDay() && !isOpen(current)[0] && 'color--red',
+          'font--bold'
+        )}
       >
         {el.length === 2 ? el[1] : el[1] + ' AM - ' + el[2] + ' PM'}
       </dd>
