@@ -34,7 +34,7 @@ function Intro() {
       </div>
       <a
         className="w-button w-button--large w-button--primary w-button--rounded m-bottom--24"
-        href="google.com"
+        href="#"
         rel="nofollow"
       >
         Book an Appointment
