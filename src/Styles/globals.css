@@ -5160,7 +5160,10 @@ a:hover,
     sans-serif;
   color: #191919;
 }
-.landing-widget .landing {
+/* .landing-widget .landing {
+  padding-top: 120px;
+} */
+.landing {
   padding-top: 120px;
 }
 .landing-widget .modal--menu ul {

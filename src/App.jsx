@@ -1,19 +1,22 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-//import Calendar from './Components/Calendar';
 import './Styles/globals.css';
 import Header from './Components/Header';
 import Section from './Components/Section';
+import Service from './Components/Service';
 
 function App() {
   return (
-    <React.Fragment>
-      <div className="landing-widget">
+    <Router>
+      <div className="App">
         <Header />
-        <Section />
-        {/* <Calendar /> */}
+        <Routes>
+          <Route path="/" element={<Section />} />
+          <Route path="/service" element={<Service />} />
+        </Routes>
       </div>
-    </React.Fragment>
+    </Router>
   );
 }
 

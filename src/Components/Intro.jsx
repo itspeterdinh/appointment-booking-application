@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Intro() {
   const [toggle, setToggle] = useState(true);
@@ -32,13 +33,11 @@ function Intro() {
           Blinkk.Esthetics
         </h3>
       </div>
-      <a
-        className="w-button w-button--large w-button--primary w-button--rounded m-bottom--24"
-        href="#"
-        rel="nofollow"
-      >
-        Book an Appointment
-      </a>
+      <Link to="/service">
+        <button className="w-button w-button--large w-button--primary w-button--rounded m-bottom--24">
+          Book an Appointment
+        </button>
+      </Link>
       <p className="m-bottom--32">
         {toggle
           ? test2
