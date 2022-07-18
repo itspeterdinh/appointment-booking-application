@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+.py-1\.5 {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}
+.pd-1 {
+  padding: 0.8rem;
+}
+.border {
+  border: 1px solid #ccc !important;
+  border-radius: 5px;
+}
+.border-bottom {
+  border-bottom: 1px solid #ccc !important;
+}
 html {
   box-sizing: border-box;
   -ms-overflow-style: scrollbar;

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
 function ServiceCard(props) {
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(props.selected);
   const [showed, setShowed] = useState(false);
 
   const handleChange = () => {
     setChecked((prev) => !prev);
+    props.onSelected(props.index);
   };
 
   const showInfo = () => {
@@ -29,11 +30,7 @@ function ServiceCard(props) {
             className="service-card__footer"
             onClick={(e) => e.stopPropagation()}
           >
-            {!props.price ? (
-              <span>{'Price Varies · '}</span>
-            ) : (
-              <span>{'$' + props.price + ' · '}</span>
-            )}
+            {!props.price ? 'Price Varies · ' : '$' + props.price + ' · '}
             {props.time + ' minutes · '}
             <button
               className="service-card__button"

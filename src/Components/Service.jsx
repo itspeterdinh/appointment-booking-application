@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import ApmtSteps from './ApmtSteps';
 import ServiceCard from './ServiceCard';
 import { services } from './TestData';
+import AppContext from '../Contexts/app-context';
 
 function Section() {
+  const ctx = useContext(AppContext);
+
+  const handleSelected = (index) => {
+    services[index].selected = !services[index].selected;
+    if (services[index].selected) {
+      ctx.count += 1;
+    } else {
+      ctx.count -= 1;
+    }
+    if (ctx.count === 0) {
+      ctx.setState(false, ctx.count);
+    } else {
+      ctx.setState(true, ctx.count);
+    }
+  };
+
   return (
     <section className="container landing">
       <section className="row">
@@ -15,14 +32,17 @@ function Section() {
           <h3 className="font--bold m-bottom--24">
             Select one or more services
           </h3>
-          {services.map((data) => {
+          {services.map((data, index) => {
             return (
               <ServiceCard
+                index={index}
                 id={data.id}
                 name={data.name}
                 price={data.price}
                 time={data.time}
                 description={data.description}
+                onSelected={handleSelected}
+                selected={data.selected}
               />
             );
           })}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { services } from './TestData';
 
 function ApmtSteps(props) {
   return (
@@ -12,6 +13,7 @@ function ApmtSteps(props) {
         <div className="font--bold m-bottom--16 link--browser">
           <h5 className="sidebar-section-title">Select service</h5>
         </div>
+        <div className="sidebar-multi-service-selection"></div>
       </li>
       <li
         className={
