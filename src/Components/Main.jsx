@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 
+import { services, staffs } from './TestData';
+
 function Main() {
   const [arr, setArr] = useState([
     { id: 0, name: 'Services', isActive: true },
@@ -35,8 +37,8 @@ function Main() {
           arr[0].isActive ? 'tab-content--active' : 'tab-content--inactive'
         }
       >
-        {services.map((dat) => {
-          return serviceCard(dat);
+        {services.map((data) => {
+          return serviceCard(data);
         })}
       </section>
       <section
@@ -44,8 +46,8 @@ function Main() {
           arr[1].isActive ? 'tab-content--active' : 'tab-content--inactive'
         }
       >
-        {staffs.map((dat) => {
-          return staffCard(dat);
+        {staffs.map((data) => {
+          return staffCard(data);
         })}
       </section>
     </>
@@ -63,7 +65,7 @@ const serviceCard = (data) => {
           <h5 className="font--bold m-bottom--8">{data.name}</h5>
           <p className="m-bottom--8">{data.description}</p>
           <p className="color--full-black m-bottom--8--xs-only">
-            {data.price && <span>{'$' + data.price + ' . '}</span>}
+            {data.price && <span>{'$' + data.price + ' · '}</span>}
             {data.time + ' minutes'}
           </p>
         </div>
@@ -96,33 +98,5 @@ const staffCard = (data) => {
     </a>
   );
 };
-
-const services = [
-  {
-    id: 'A1',
-    name: 'Haircut + Design',
-    description: 'regular hair cut and design of choice',
-    time: 45,
-  },
-  {
-    id: 'A2',
-    name: 'Haircut + Beard',
-    description: 'regular hair cut and beard taper and lineup',
-    price: 30,
-    time: 45,
-  },
-  {
-    id: 'A3',
-    name: 'Regular Haircut',
-    description: 'Includes fade/taper, trim on top, and lineup',
-    price: 25,
-    time: 45,
-  },
-];
-
-const staffs = [
-  { id: 100, name: 'Rosie Uyen Kieu' },
-  { id: 101, name: 'Vuberry Hoai Vu' },
-];
 
 export default Main;
