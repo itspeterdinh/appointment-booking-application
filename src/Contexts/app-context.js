@@ -19,6 +19,27 @@ export const AppContextProvider = (props) => {
   };
 
   useEffect(() => {
+    if (!localStorage.getItem('blinkk-esthetics-appointment')) {
+      const date = new Date();
+      const reservedSession = {
+        lastUpdatedTime: date.getTime(),
+        location: 'premises',
+        services: [],
+        staffs: {},
+      };
+      localStorage.setItem(
+        'blinkk-esthetics-appointment',
+        JSON.stringify(reservedSession)
+      );
+    } else {
+      const reservedSession = JSON.parse(
+        localStorage.getItem('blinkk-esthetics-appointment')
+      );
+      setSelectedServices(reservedSession.services);
+    }
+  }, []);
+
+  useEffect(() => {
     if (selectedServices.length > 0) {
       setState(true);
     } else {

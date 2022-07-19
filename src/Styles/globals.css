@@ -16,6 +16,9 @@
 .border-bottom {
   border-bottom: 1px solid #ccc !important;
 }
+.text-underline {
+  border: 1px solid rgb(239 68 68 / var(--tw-text-opacity));
+}
 html {
   box-sizing: border-box;
   -ms-overflow-style: scrollbar;

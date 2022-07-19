@@ -7,8 +7,20 @@ function ToolBar() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const updateLocalStorage = () => {
+    const reservedSession = JSON.parse(
+      localStorage.getItem('blinkk-esthetics-appointment')
+    );
+    reservedSession.services = ctx.selectedServices;
+    localStorage.setItem(
+      'blinkk-esthetics-appointment',
+      JSON.stringify(reservedSession)
+    );
+  };
+
   const navigateHandler = () => {
     navigate('/date');
+    updateLocalStorage();
   };
 
   const navigateBack = () => {

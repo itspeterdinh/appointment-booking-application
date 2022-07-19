@@ -12,6 +12,7 @@ import {
   parse,
   startOfToday,
   isBefore,
+  isAfter,
 } from 'date-fns';
 
 import '.././Styles/globals.css';
@@ -47,7 +48,7 @@ function Calendar() {
         <div className="md:grid md:grid-cols-1 md:divide-x md:divide-gray-200 border">
           <div className="md:pr-0">
             <div className="flex items-center pd-1 border-bottom">
-              <h2 className="flex-auto font-semibold text-gray-900">
+              <h2 className="flex-auto font-semibold text-gray-800">
                 {format(firstDayCurrentMonth, 'MMM yyyy')}
               </h2>
               <button
@@ -69,7 +70,7 @@ function Calendar() {
                 <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
               </button>
             </div>
-            <div className="grid grid-cols-7 mt-5 text-xs leading-6 text-center text-gray-500">
+            <div className="grid grid-cols-7 mt-5 text-xs leading-6 text-center text-gray-1300">
               <div>S</div>
               <div>M</div>
               <div>T</div>
@@ -95,11 +96,14 @@ function Calendar() {
                       isEqual(day, selectedDay) && 'text-white',
                       !isEqual(day, selectedDay) &&
                         isToday(day) &&
-                        'text-red-500',
+                        'text-red-500 text-underline',
                       !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        isSameMonth(day, firstDayCurrentMonth) &&
-                        'text-gray-900',
+                        isAfter(day, today) &&
+                        'text-blue-700',
+                      // !isEqual(day, selectedDay) &&
+                      //   !isToday(day) &&
+                      //   isSameMonth(day, firstDayCurrentMonth) &&
+                      //   'text-blue-700',
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
@@ -113,7 +117,8 @@ function Calendar() {
                         'hover:bg-gray-200',
                       (isEqual(day, selectedDay) || isToday(day)) &&
                         'font-semibold',
-                      'mx-auto flex h-9 w-9 items-center justify-center rounded-full none-border'
+                      isBefore(day, today) && 'text-gray-300',
+                      'mx-auto flex h-9 w-9 items-center justify-center rounded-full none-border font--bold'
                     )}
                   >
                     <time dateTime={format(day, 'yyyy-MM-dd')}>
