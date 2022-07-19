@@ -1,16 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
+import { services } from './TestData';
+import AppContext from '../Contexts/app-context';
 
 function ServiceCard(props) {
-  const [checked, setChecked] = useState(props.selected);
+  const ctx = useContext(AppContext);
+  const [checked, setChecked] = useState(ctx.element.has(props.id));
   const [showed, setShowed] = useState(false);
+
+  useEffect(() => {
+    setChecked(ctx.element.has(props.id));
+  }, [ctx.element, props.id]);
 
   const handleChange = () => {
     setChecked((prev) => !prev);
-    props.onSelected(props.index);
+    handleSelected(props.index);
   };
 
   const showInfo = () => {
     setShowed((prev) => !prev);
+  };
+
+  const handleSelected = (index) => {
+    if (ctx.element.has(props.id)) {
+      ctx.setSelectedServices('remove', services[index]);
+    } else {
+      ctx.setSelectedServices('add', services[index]);
+    }
   };
 
   return (

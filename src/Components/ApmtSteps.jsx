@@ -21,7 +21,10 @@ function ApmtSteps(props) {
               </h5>
               {props.step !== 'service' && ' · '}
               {props.step !== 'service' && (
-                <span className="sidebar-multi-service-selection--selection sidebar-multi-service-selection--selection--edit">
+                <span
+                  className="sidebar-multi-service-selection--selection 
+                sidebar-multi-service-selection--selection--edit"
+                >
                   <Link to="/service">Edit</Link>
                 </span>
               )}

@@ -100,10 +100,6 @@ function Calendar() {
                       !isEqual(day, selectedDay) &&
                         isAfter(day, today) &&
                         'text-blue-700',
-                      // !isEqual(day, selectedDay) &&
-                      //   !isToday(day) &&
-                      //   isSameMonth(day, firstDayCurrentMonth) &&
-                      //   'text-blue-700',
                       !isEqual(day, selectedDay) &&
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const AppContext = React.createContext({
   state: false,
+  element: Set,
   selectedServices: [],
   setSelectedServices: () => {},
 });
@@ -9,13 +10,24 @@ const AppContext = React.createContext({
 export const AppContextProvider = (props) => {
   const [state, setState] = useState(false);
   const [selectedServices, setSelectedServices] = useState([]);
+  const [element, setElement] = useState(new Set());
 
   const handleSelectedServices = (action, item) => {
     if (action === 'add') {
       setSelectedServices((prev) => [...prev, item]);
+      addElement(item.id);
     } else {
       setSelectedServices(selectedServices.filter((el) => el.id !== item.id));
+      removeElement(item.id);
     }
+  };
+
+  const addElement = (element) => {
+    setElement((prev) => new Set(prev.add(element)));
+  };
+
+  const removeElement = (element) => {
+    setElement((prev) => new Set([...prev].filter((x) => x !== element)));
   };
 
   useEffect(() => {
@@ -36,6 +48,9 @@ export const AppContextProvider = (props) => {
         localStorage.getItem('blinkk-esthetics-appointment')
       );
       setSelectedServices(reservedSession.services);
+      for (let i = 0; i < reservedSession.services.length; i++) {
+        addElement(reservedSession.services[i].id);
+      }
     }
   }, []);
 
@@ -50,6 +65,7 @@ export const AppContextProvider = (props) => {
   return (
     <AppContext.Provider
       value={{
+        element: element,
         state: state,
         selectedServices: selectedServices,
         setSelectedServices: handleSelectedServices,

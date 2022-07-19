@@ -14,9 +14,9 @@ function Section() {
           <LocationMap />
           <Connect />
         </aside>
-        <main className="col m-bottom-96">
+        <div className="col m-bottom-96">
           <Main />
-        </main>
+        </div>
       </section>
     </section>
   );

@@ -4,7 +4,6 @@ export const services = [
     name: 'Haircut + Design',
     description: 'Regular hair cut and design of choice',
     time: 45,
-    selected: false,
   },
   {
     id: 'A2',
@@ -12,7 +11,6 @@ export const services = [
     description: 'Regular hair cut and beard taper and lineup',
     price: 30,
     time: 45,
-    selected: false,
   },
   {
     id: 'A3',
@@ -20,7 +18,6 @@ export const services = [
     description: 'Includes fade/taper, trim on top, and lineup',
     price: 25,
     time: 45,
-    selected: false,
   },
 ];
 

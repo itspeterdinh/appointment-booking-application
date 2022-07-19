@@ -1,23 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import ApmtSteps from './ApmtSteps';
 import ServiceCard from './ServiceCard';
 import { services } from './TestData';
-import AppContext from '../Contexts/app-context';
 
 function Section() {
-  const ctx = useContext(AppContext);
-
-  const handleSelected = (index) => {
-    if (!services[index].selected) {
-      ctx.setSelectedServices('add', services[index]);
-      services[index].selected = true;
-    } else {
-      ctx.setSelectedServices('remove', services[index]);
-      services[index].selected = false;
-    }
-  };
-
   return (
     <section className="container landing">
       <section className="row">
@@ -37,7 +24,6 @@ function Section() {
                 price={data.price}
                 time={data.time}
                 description={data.description}
-                onSelected={handleSelected}
                 selected={data.selected}
               />
             );
