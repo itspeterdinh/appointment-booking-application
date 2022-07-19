@@ -1,9 +1,19 @@
-import React from 'react';
-
+import React, { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ApmtSteps from './ApmtSteps';
 import Calendar from './Calendar';
+import AppContext from '../Contexts/app-context';
 
 function Date() {
+  const ctx = useContext(AppContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!ctx.state) {
+      navigate('/service');
+    }
+  }, [ctx, navigate]);
+
   return (
     <section className="container landing">
       <section className="row">

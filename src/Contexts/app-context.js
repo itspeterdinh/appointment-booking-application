@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const AppContext = React.createContext({
-  count: 0,
   state: false,
-  setState: (bool) => {},
+  selectedServices: [],
+  setSelectedServices: () => {},
 });
 
 export const AppContextProvider = (props) => {
   const [state, setState] = useState(false);
-  const [count, setCount] = useState(0);
+  const [selectedServices, setSelectedServices] = useState([]);
 
-  const handleState = (bool, count) => {
-    setState(bool);
-    setCount(count);
+  const handleSelectedServices = (action, item) => {
+    if (action === 'add') {
+      setSelectedServices((prev) => [...prev, item]);
+    } else {
+      setSelectedServices(selectedServices.filter((el) => el.id !== item.id));
+    }
   };
+
+  useEffect(() => {
+    if (selectedServices.length > 0) {
+      setState(true);
+    } else {
+      setState(false);
+    }
+  }, [selectedServices]);
 
   return (
     <AppContext.Provider
-      value={{ count: count, state: state, setState: handleState }}
+      value={{
+        state: state,
+        selectedServices: selectedServices,
+        setSelectedServices: handleSelectedServices,
+      }}
     >
       {props.children}
     </AppContext.Provider>

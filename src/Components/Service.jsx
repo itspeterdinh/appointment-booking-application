@@ -9,16 +9,12 @@ function Section() {
   const ctx = useContext(AppContext);
 
   const handleSelected = (index) => {
-    services[index].selected = !services[index].selected;
-    if (services[index].selected) {
-      ctx.count += 1;
+    if (!services[index].selected) {
+      ctx.setSelectedServices('add', services[index]);
+      services[index].selected = true;
     } else {
-      ctx.count -= 1;
-    }
-    if (ctx.count === 0) {
-      ctx.setState(false, ctx.count);
-    } else {
-      ctx.setState(true, ctx.count);
+      ctx.setSelectedServices('remove', services[index]);
+      services[index].selected = false;
     }
   };
 
