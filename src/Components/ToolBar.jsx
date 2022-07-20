@@ -12,6 +12,7 @@ function ToolBar() {
       localStorage.getItem('blinkk-esthetics-appointment')
     );
     reservedSession.services = ctx.selectedServices;
+    reservedSession.lastUpdatedTime = Date.now();
     localStorage.setItem(
       'blinkk-esthetics-appointment',
       JSON.stringify(reservedSession)

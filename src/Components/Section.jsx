@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Intro from './Intro';
 import LocationMap from './LocationMap';
 import Connect from './Connect';

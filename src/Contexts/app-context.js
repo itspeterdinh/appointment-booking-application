@@ -31,25 +31,33 @@ export const AppContextProvider = (props) => {
   };
 
   useEffect(() => {
+    const newSession = {
+      lastUpdatedTime: Date.now(),
+      location: 'premises',
+      services: [],
+      staffs: {},
+    };
     if (!localStorage.getItem('blinkk-esthetics-appointment')) {
-      const date = new Date();
-      const reservedSession = {
-        lastUpdatedTime: date.getTime(),
-        location: 'premises',
-        services: [],
-        staffs: {},
-      };
       localStorage.setItem(
         'blinkk-esthetics-appointment',
-        JSON.stringify(reservedSession)
+        JSON.stringify(newSession)
       );
     } else {
       const reservedSession = JSON.parse(
         localStorage.getItem('blinkk-esthetics-appointment')
       );
-      setSelectedServices(reservedSession.services);
-      for (let i = 0; i < reservedSession.services.length; i++) {
-        addElement(reservedSession.services[i].id);
+      if (
+        Math.floor((Date.now() - reservedSession.lastUpdatedTime) / 1000) > 900
+      ) {
+        localStorage.setItem(
+          'blinkk-esthetics-appointment',
+          JSON.stringify(newSession)
+        );
+      } else {
+        setSelectedServices(reservedSession.services);
+        for (let i = 0; i < reservedSession.services.length; i++) {
+          addElement(reservedSession.services[i].id);
+        }
       }
     }
   }, []);

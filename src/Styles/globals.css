@@ -23,7 +23,7 @@ html {
   box-sizing: border-box;
   -ms-overflow-style: scrollbar;
 }
-.text-blue-700{
+.text-blue-700 {
   --tw-text-opacity: 1;
   color: var(--color-link-color);
 }

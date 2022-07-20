@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import './Styles/globals.css';
@@ -10,22 +10,6 @@ import Contact from './Components/Contact';
 import ToolBar from './Components/ToolBar';
 
 function App() {
-  useEffect(() => {
-    if (!localStorage.getItem('blinkk-esthetics-appointment')) {
-      const date = new Date();
-      const reservedSession = {
-        lastUpdatedTime: date.getTime(),
-        location: 'premises',
-        services: [],
-        staffs: {},
-      };
-      localStorage.setItem(
-        'blinkk-esthetics-appointment',
-        JSON.stringify(reservedSession)
-      );
-    }
-  }, []);
-
   return (
     <Router>
       <div className="App">
