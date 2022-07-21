@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-function Header() {
+function Header(props) {
   const path = useLocation();
 
   return (
@@ -17,15 +17,12 @@ function Header() {
                       <div
                         className="item-image company-brading-picture"
                         style={{
-                          backgroundImage:
-                            'url(' +
-                            'https://cdn.shopify.com/s/files/1/0536/8990/9410/products/image_2d73ff50-2829-4fbc-995f-9f74b2cf689b_600x.jpg?v=1645647673' +
-                            ')',
+                          backgroundImage: `url(${props.avatar})`
                         }}
                       />
                     </div>
                     <h2 className="font--bold merchant-header__unit-title merchant-header__unit-name color--full-black">
-                      Blinkk.Esthetics
+                      {props.name}
                     </h2>
                   </div>
                 </Link>

@@ -8,11 +8,17 @@ const businessSchema = new mongoose.Schema({
     trim: true
   },
   slug: String,
+  avatar: String,
   description: {
     type: String,
     trim: true
   },
-  hours: [String],
+  hours: [
+    {
+      date: String,
+      time: String
+    }
+  ],
   email: {
     type: String,
     require: true,
@@ -22,7 +28,7 @@ const businessSchema = new mongoose.Schema({
   instagram: String
 });
 
-itemSchema.pre('save', function(next) {
+businessSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });

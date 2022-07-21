@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 
-function LocationMap() {
+function LocationMap(props) {
   const [toggle, setToggle] = useState(true);
   const current = new Date();
 
@@ -23,8 +23,9 @@ function LocationMap() {
           {toggle ? (
             <p
               className={
-                (isOpen(current)[0] ? 'color--green' : 'color--red') +
-                ' font--bold'
+                (isOpen(current, props.hours)[0]
+                  ? 'color--green'
+                  : 'color--red') + ' font--bold'
               }
             >
               {isOpen(current)}{' '}
@@ -38,7 +39,7 @@ function LocationMap() {
           )}
           <a
             className="font--bold blue cursor hover:underline"
-            onClick={() => setToggle((prev) => !prev)}
+            onClick={() => setToggle(prev => !prev)}
           >
             {toggle ? 'More' : 'Less'}
           </a>
@@ -55,11 +56,13 @@ const tempDate = [
   ['Wed', '9:00', '5:00'],
   ['Thu', '9:00', '5:00'],
   ['Fri', '9:00', '5:00'],
-  ['Sat', '9:00', '5:00'],
+  ['Sat', '9:00', '5:00']
 ];
 
-const isOpen = (current) => {
+const isOpen = (current, hours) => {
   const cur = tempDate[current.getDay()];
+
+  console.log(hours);
 
   if (cur.length === 2) {
     return [false, 'Closed Today'];

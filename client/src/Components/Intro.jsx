@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function Intro() {
+function Intro(props) {
   const [toggle, setToggle] = useState(true);
 
   let numChar = 0;
@@ -21,17 +21,12 @@ function Intro() {
         <div
           className="item-image"
           style={{
-            backgroundImage:
-              'url(' +
-              'https://cdn.shopify.com/s/files/1/0536/8990/9410/products/image_2d73ff50-2829-4fbc-995f-9f74b2cf689b_600x.jpg?v=1645647673' +
-              ')',
+            backgroundImage: `url(${props.avatar})`
           }}
         />
       </div>
       <div className="m-bottom--24">
-        <h3 className="font--bold m-bottom--16 company-name">
-          Blinkk.Esthetics
-        </h3>
+        <h3 className="font--bold m-bottom--16 company-name">{props.name}</h3>
       </div>
       <Link to="/service">
         <button className="w-button w-button--large w-button--primary w-button--rounded m-bottom--24">
@@ -41,7 +36,7 @@ function Intro() {
       <p className="m-bottom--32">
         {toggle
           ? test2
-          : test3.map((el) => {
+          : test3.map(el => {
               return (
                 <>
                   {el}
@@ -51,7 +46,7 @@ function Intro() {
             })}{' '}
         <a
           className="font--bold blue cursor hover:underline"
-          onClick={() => setToggle((prev) => !prev)}
+          onClick={() => setToggle(prev => !prev)}
         >
           {toggle ? 'More' : 'Less'}
         </a>
