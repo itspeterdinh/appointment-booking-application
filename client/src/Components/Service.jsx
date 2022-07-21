@@ -18,6 +18,7 @@ function Section() {
           {services.map((data, index) => {
             return (
               <ServiceCard
+                key={data.id}
                 index={index}
                 id={data.id}
                 name={data.name}

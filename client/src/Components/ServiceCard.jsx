@@ -34,7 +34,6 @@ function ServiceCard(props) {
         'ember-view card card--interactive' + (checked ? ' card--active' : '')
       }
       onClick={handleChange}
-      key={props.id}
     >
       <div className="row">
         <div className="col col-10 col-md-11">
