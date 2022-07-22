@@ -28,12 +28,12 @@ function LocationMap(props) {
                   : 'color--red') + ' font--bold'
               }
             >
-              {isOpen(current)}{' '}
+              {isOpen(current, props.hours)}{' '}
             </p>
           ) : (
             <dl className="open-hours-table m-bottom--16">
-              {tempDate.map((el, index) => {
-                return openHours(el, index, current);
+              {props.hours.map((el, index) => {
+                return openHours(el, index, current, props.hours);
               })}
             </dl>
           )}
@@ -49,36 +49,26 @@ function LocationMap(props) {
   );
 }
 
-const tempDate = [
-  ['Sun', 'Closed'],
-  ['Mon', '9:00', '5:00'],
-  ['Tue', '9:00', '5:00'],
-  ['Wed', '9:00', '5:00'],
-  ['Thu', '9:00', '5:00'],
-  ['Fri', '9:00', '5:00'],
-  ['Sat', '9:00', '5:00']
-];
-
 const isOpen = (current, hours) => {
-  const cur = tempDate[current.getDay()];
+  const date = hours[current.getDay()];
 
-  console.log(hours);
-
-  if (cur.length === 2) {
+  if (date.time === 'Closed') {
     return [false, 'Closed Today'];
   }
+
+  const cur = date.time.split('-');
 
   const open = new Date();
   const close = new Date();
 
-  open.setHours(parseInt(cur[1].split()[0]), 0, 0);
-  close.setHours(parseInt(cur[2].split()[0]) + 12, 0, 0);
+  open.setHours(parseInt(cur[0].split(':')[0]), 0, 0);
+  close.setHours(parseInt(cur[1].split(':')[0]) + 12, 0, 0);
 
   if (
     open.getTime() <= current.getTime() &&
     current.getTime() <= close.getTime()
   ) {
-    return [true, 'Open today until ' + cur[2] + ' PM'];
+    return [true, 'Open today until ' + cur[1] + ' PM'];
   } else {
     return [false, 'Close now'];
   }
@@ -88,26 +78,36 @@ const classNames = (...classes) => {
   return classes.filter(Boolean).join(' ');
 };
 
-const openHours = (el, index, current) => {
+const openHours = (el, index, current, hours) => {
   return (
     <div className="m-bottom--8" key={index}>
       <dt
         className={classNames(
-          index === current.getDay() && isOpen(current)[0] && 'color--green',
-          index === current.getDay() && !isOpen(current)[0] && 'color--red',
+          index === current.getDay() &&
+            isOpen(current, hours)[0] &&
+            'color--green',
+          index === current.getDay() &&
+            !isOpen(current, hours)[0] &&
+            'color--red',
           'font--bold'
         )}
       >
-        {el[0]}
+        {el.date.substring(0, 3)}
       </dt>
       <dd
         className={classNames(
-          index === current.getDay() && isOpen(current)[0] && 'color--green',
-          index === current.getDay() && !isOpen(current)[0] && 'color--red',
+          index === current.getDay() &&
+            isOpen(current, hours)[0] &&
+            'color--green',
+          index === current.getDay() &&
+            !isOpen(current, hours)[0] &&
+            'color--red',
           'font--bold'
         )}
       >
-        {el.length === 2 ? el[1] : el[1] + ' AM - ' + el[2] + ' PM'}
+        {el.time === 'Closed'
+          ? el.time
+          : el.time.split('-')[0] + ' AM - ' + el.time.split('-')[1] + ' PM'}
       </dd>
     </div>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
@@ -10,14 +11,24 @@ import Contact from './Components/Contact';
 import ToolBar from './Components/ToolBar';
 
 function App() {
-  const [business, setBusiness] = useState({});
+  const [business, setBusiness] = useState(null);
+  const [services, setServices] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchBusiness = async () => {
     try {
-      await axios.get(`http://localhost:5000/businesses`).then(res => {
+      await axios.get(`/businesses`).then(res => {
         setBusiness(res.data.data.business);
-        setIsLoading(false);
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchServices = async () => {
+    try {
+      await axios.get(`/services`).then(res => {
+        setServices(res.data.data.data);
       });
     } catch (err) {
       console.log(err);
@@ -25,25 +36,28 @@ function App() {
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    fetchBusiness();
+    Promise.all([fetchBusiness(), fetchServices()]).then(() =>
+      setIsLoading(false)
+    );
   }, []);
 
   return (
     <Router>
-      <div className="App">
-        <Header name={business.name} avatar={business.avatar} />
-        <Routes>
-          <Route
-            path="/"
-            element={<Section business={business} isLoading={isLoading} />}
-          />
-          <Route path="/service" element={<Service />} />
-          <Route path="/date" element={<CDate />} />
-          <Route path="/contact" element={<Contact />} />
-        </Routes>
-        <ToolBar />
-      </div>
+      {!isLoading && (
+        <div className="App">
+          <Header name={business.name} avatar={business.avatar} />
+          <Routes>
+            <Route
+              path="/"
+              element={<Section business={business} services={services} />}
+            />
+            <Route path="/service" element={<Service services={services} />} />
+            <Route path="/date" element={<CDate />} />
+            <Route path="/contact" element={<Contact />} />
+          </Routes>
+          <ToolBar />
+        </div>
+      )}
     </Router>
   );
 }

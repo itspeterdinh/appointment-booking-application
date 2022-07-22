@@ -4,16 +4,8 @@ import { Link } from 'react-router-dom';
 
 function Intro(props) {
   const [toggle, setToggle] = useState(true);
-
-  let numChar = 0;
-  let test2 = '';
-  while (numChar <= 100) {
-    test2 += text[numChar];
-    numChar += 1;
-  }
-  test2 += ' ...';
-
-  const test3 = text.split('\n');
+  const contractDescription = props.description.substring(0, 100);
+  const expandedDescription = props.description.split(/\r?\n/);
 
   return (
     <section className="company-intro">
@@ -35,8 +27,8 @@ function Intro(props) {
       </Link>
       <p className="m-bottom--32">
         {toggle
-          ? test2
-          : test3.map(el => {
+          ? contractDescription
+          : expandedDescription.map(el => {
               return (
                 <>
                   {el}
@@ -54,15 +46,5 @@ function Intro(props) {
     </section>
   );
 }
-
-const text =
-  '- Feel free to head straight in at the time of your appointment, enter in through my front door.\n' +
-  '- Please be on time and only book appointments you can make! (Always better to be 5 min early than 5 min late)\n' +
-  '- Let me know ASAP if you need to cancel\n' +
-  '- Last minute cancellations results in a $5 fee next haircut.\n' +
-  '- Accepting cash (preferred) and zelle (sparingly)\n' +
-  '- If you need an emergency haircut and I am booked for that day, message me personally on Instagram or iMessage and I will work with you.\n' +
-  '- Any questions feel free to message me on Instagram @scotty_blendz or text my number 408-838-6303\n\n' +
-  'Thank you for choosing me to be your barber, looking forward to meeting all of you guys';
 
 export default Intro;

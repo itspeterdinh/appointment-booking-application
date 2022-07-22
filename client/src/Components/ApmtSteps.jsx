@@ -34,11 +34,11 @@ function ApmtSteps(props) {
           )}
         </div>
         <div className="sidebar-multi-service-selection">
-          {ctx.selectedServices.map((data) => {
+          {ctx.selectedServices.map(data => {
             return (
               <div
                 className="ember-view card card--secondary sidebar-multi-service-selection--selection"
-                key={data.id}
+                key={data._id}
               >
                 <p>
                   <span className="color--full-black">{data.name}</span>

@@ -2,9 +2,8 @@ import React from 'react';
 
 import ApmtSteps from './ApmtSteps';
 import ServiceCard from './ServiceCard';
-import { services } from './TestData';
 
-function Section() {
+function Service({ services }) {
   return (
     <section className="container landing">
       <section className="row">
@@ -15,17 +14,17 @@ function Section() {
           <h3 className="font--bold m-bottom--24">
             Select one or more services
           </h3>
-          {services.map((data, index) => {
+          {services.map((service, index) => {
             return (
               <ServiceCard
-                key={data.id}
+                key={'svc' + index}
                 index={index}
-                id={data.id}
-                name={data.name}
-                price={data.price}
-                time={data.time}
-                description={data.description}
-                selected={data.selected}
+                service={service}
+                // id={data._id}
+                // name={data.name}
+                // price={data.price}
+                // time={data.time}
+                // description={data.description}
               />
             );
           })}
@@ -35,4 +34,4 @@ function Section() {
   );
 }
 
-export default Section;
+export default Service;

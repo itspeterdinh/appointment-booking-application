@@ -1,30 +1,29 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { services } from './TestData';
 import AppContext from '../Contexts/app-context';
 
-function ServiceCard(props) {
+function ServiceCard({ index, service }) {
   const ctx = useContext(AppContext);
-  const [checked, setChecked] = useState(ctx.element.has(props.id));
+  const [checked, setChecked] = useState(ctx.element.has(service._id));
   const [showed, setShowed] = useState(false);
 
   useEffect(() => {
-    setChecked(ctx.element.has(props.id));
-  }, [ctx.element, props.id]);
+    setChecked(ctx.element.has(service._id));
+  }, [ctx.element, service._id]);
 
   const handleChange = () => {
-    setChecked((prev) => !prev);
-    handleSelected(props.index);
+    setChecked(prev => !prev);
+    handleSelected(index);
   };
 
   const showInfo = () => {
-    setShowed((prev) => !prev);
+    setShowed(prev => !prev);
   };
 
-  const handleSelected = (index) => {
-    if (ctx.element.has(props.id)) {
-      ctx.setSelectedServices('remove', services[index]);
+  const handleSelected = () => {
+    if (ctx.element.has(service._id)) {
+      ctx.setSelectedServices('remove', service);
     } else {
-      ctx.setSelectedServices('add', services[index]);
+      ctx.setSelectedServices('add', service);
     }
   };
 
@@ -38,14 +37,14 @@ function ServiceCard(props) {
       <div className="row">
         <div className="col col-10 col-md-11">
           <h5 className="service-card__header font--bold m-bottom--8">
-            {props.name}
+            {service.name}
           </h5>
           <div
             className="service-card__footer"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
-            {!props.price ? 'Price Varies · ' : '$' + props.price + ' · '}
-            {props.time + ' minutes · '}
+            {!service.price ? 'Price Varies · ' : '$' + service.price + ' · '}
+            {service.time + ' minutes · '}
             <button
               className="service-card__button"
               type="button"
@@ -56,7 +55,7 @@ function ServiceCard(props) {
             {showed && (
               <div>
                 <p className="description m-top--8 font--small">
-                  {props.description}
+                  {service.description}
                 </p>
               </div>
             )}

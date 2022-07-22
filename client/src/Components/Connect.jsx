@@ -6,7 +6,7 @@ function getWindowSize() {
   else return false;
 }
 
-function Connect() {
+function Connect(props) {
   const [isMobile, setIsMobile] = useState(getWindowSize());
   const [toggle, setToggle] = useState(false);
 
@@ -14,9 +14,7 @@ function Connect() {
     function handleWindowResize() {
       setIsMobile(getWindowSize());
     }
-
     window.addEventListener('resize', handleWindowResize);
-
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
@@ -29,16 +27,16 @@ function Connect() {
           <h5 className="font--bold m-bottom--16">Connect</h5>
           <div className="company-contact-info link--browser font--bold">
             <span className="data-descriptive-icon obs-icon--envelope-stroked"></span>
-            <a href="mailto:peterdinh94@gmail.com">peterdinh94@gmail</a>
+            <a href="mailto:peterdinh94@gmail.com">{props.email}</a>
             <span className="data-descriptive-icon obs-icon--mobile"></span>
-            <a href="tel:+14088595184">(408) 859-5184</a>
+            <a href="tel:+14088595184">{props.phone}</a>
             <span className="data-descriptive-icon obs-icon--social-instagram"></span>
             <a
-              href="https://www.instagram.com/blinkk.esthetics/"
+              href={`https://www.instagram.com/${props.instagram}/`}
               target="_blank"
               rel="noreferrer"
             >
-              blinkk.esthetics
+              {props.instagram}
             </a>
           </div>
         </div>
@@ -46,7 +44,7 @@ function Connect() {
       {isMobile && (
         <button
           className="w-button w-button--large w-button--secondary w-button--rounded w-button--full-width-mobile"
-          onClick={() => setToggle((prev) => !prev)}
+          onClick={() => setToggle(prev => !prev)}
         >
           {toggle ? 'Less' : 'More'}
         </button>

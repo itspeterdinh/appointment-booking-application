@@ -1,27 +1,37 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { staffs } from './TestData';
+import { useNavigate } from 'react-router-dom';
+import AppContext from '../Contexts/app-context';
 
-import { services, staffs } from './TestData';
-
-function Main() {
+function Main({ services }) {
   const [arr, setArr] = useState([
     { id: 0, name: 'Services', isActive: true },
-    { id: 1, name: 'Staff', isActive: false },
+    { id: 1, name: 'Staff', isActive: false }
   ]);
+  const ctx = useContext(AppContext);
+  const navigate = useNavigate();
 
-  const handleItems = (i) => {
+  const handleItems = i => {
     setArr(
-      arr.map((el) =>
+      arr.map(el =>
         el.id === i ? { ...el, isActive: true } : { ...el, isActive: false }
       )
     );
+  };
+
+  const onClick = service => {
+    if (!ctx.element.has(service._id)) {
+      ctx.setSelectedServices('add', service);
+    }
+    navigate('/service');
   };
 
   return (
     <>
       <h4 className="font--bold m-bottom--16">Book an appointment</h4>
       <ul className="item-filter m-bottom--32">
-        {arr.map((el) => (
+        {arr.map(el => (
           <li className="font--bold" key={el.name + el.id}>
             <a
               className={'tab ' + (el.isActive && 'tab--active')}
@@ -37,8 +47,8 @@ function Main() {
           arr[0].isActive ? 'tab-content--active' : 'tab-content--inactive'
         }
       >
-        {services.map((data) => {
-          return serviceCard(data);
+        {services.map(data => {
+          return serviceCard(data, onClick);
         })}
       </section>
       <section
@@ -46,7 +56,7 @@ function Main() {
           arr[1].isActive ? 'tab-content--active' : 'tab-content--inactive'
         }
       >
-        {staffs.map((data) => {
+        {staffs.map(data => {
           return staffCard(data);
         })}
       </section>
@@ -54,11 +64,12 @@ function Main() {
   );
 }
 
-const serviceCard = (data) => {
+const serviceCard = (data, onClick) => {
   return (
     <a
       className="card card--interactive service w-background-light"
-      key={data.id}
+      key={data._id}
+      onClick={() => onClick(data)}
     >
       <div className="row">
         <div className="col col-12 col-md-10">
@@ -77,7 +88,7 @@ const serviceCard = (data) => {
   );
 };
 
-const staffCard = (data) => {
+const staffCard = data => {
   return (
     <a className="card card--interactive w-background-light" key={data.id}>
       <div className="row">

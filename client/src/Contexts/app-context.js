@@ -4,30 +4,30 @@ const AppContext = React.createContext({
   state: false,
   element: Set,
   selectedServices: [],
-  setSelectedServices: () => {},
+  setSelectedServices: () => {}
 });
 
-export const AppContextProvider = (props) => {
+export const AppContextProvider = props => {
   const [state, setState] = useState(false);
   const [selectedServices, setSelectedServices] = useState([]);
   const [element, setElement] = useState(new Set());
 
   const handleSelectedServices = (action, item) => {
     if (action === 'add') {
-      setSelectedServices((prev) => [...prev, item]);
-      addElement(item.id);
+      setSelectedServices(prev => [...prev, item]);
+      addElement(item._id);
     } else {
-      setSelectedServices(selectedServices.filter((el) => el.id !== item.id));
-      removeElement(item.id);
+      setSelectedServices(selectedServices.filter(el => el._id !== item._id));
+      removeElement(item._id);
     }
   };
 
-  const addElement = (element) => {
-    setElement((prev) => new Set(prev.add(element)));
+  const addElement = element => {
+    setElement(prev => new Set(prev.add(element)));
   };
 
-  const removeElement = (element) => {
-    setElement((prev) => new Set([...prev].filter((x) => x !== element)));
+  const removeElement = element => {
+    setElement(prev => new Set([...prev].filter(x => x !== element)));
   };
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export const AppContextProvider = (props) => {
       lastUpdatedTime: Date.now(),
       location: 'premises',
       services: [],
-      staffs: {},
+      staffs: {}
     };
     if (!localStorage.getItem('blinkk-esthetics-appointment')) {
       localStorage.setItem(
@@ -55,9 +55,9 @@ export const AppContextProvider = (props) => {
         );
       } else {
         setSelectedServices(reservedSession.services);
-        for (let i = 0; i < reservedSession.services.length; i++) {
-          addElement(reservedSession.services[i].id);
-        }
+        reservedSession.services.forEach(el => {
+          addElement(el._id);
+        });
       }
     }
   }, []);
@@ -76,7 +76,7 @@ export const AppContextProvider = (props) => {
         element: element,
         state: state,
         selectedServices: selectedServices,
-        setSelectedServices: handleSelectedServices,
+        setSelectedServices: handleSelectedServices
       }}
     >
       {props.children}
