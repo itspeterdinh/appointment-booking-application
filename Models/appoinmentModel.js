@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const serviceSchema = new mongoose.Schema({
-  name: {
+const appointmentSchema = new mongoose.Schema({
+  customerName: {
     type: String,
     require: true,
     trim: true
@@ -17,6 +17,4 @@ const serviceSchema = new mongoose.Schema({
   price: Number
 });
 
-const Service = mongoose.model('Service', serviceSchema);
-
-module.exports = Service;
+const Service = mongoose.model('Appointment', appointmentSchema);
