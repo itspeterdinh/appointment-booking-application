@@ -1,11 +1,13 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ApmtSteps from './ApmtSteps';
 import Calendar from './Calendar';
+import ApmtTime from './ApmtTime';
 import AppContext from '../Contexts/app-context';
 
 function Date() {
   const ctx = useContext(AppContext);
+  const [dateData, setDateData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,7 +26,8 @@ function Date() {
           <h3 className="font--bold m-bottom--8">
             Select your preferred date and time
           </h3>
-          <Calendar />
+          <Calendar setDateData={setDateData} />
+          <ApmtTime dateData={dateData} />
         </div>
       </section>
     </section>

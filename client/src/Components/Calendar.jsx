@@ -23,14 +23,13 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-function Calendar() {
+function Calendar({ setDateData }) {
   const today = startOfToday();
   const [selectedDay, setSelectedDay] = useState(today);
-  const [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'));
-  const [scheduleData, setScheduleDate] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState(format(today, 'MMM-yyyy'));
+  const [scheduleData, setScheduleData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [margin, setMargin] = useState(true);
-  let firstDayCurrentMonth = parse(currentMonth, 'MMM-yyyy', new Date());
+  const firstDayCurrentMonth = parse(selectedMonth, 'MMM-yyyy', new Date());
 
   const days = eachDayOfInterval({
     start: firstDayCurrentMonth,
@@ -38,14 +37,14 @@ function Calendar() {
   });
 
   const fetchSchedule = async () => {
-    const day = new Date(currentMonth);
+    const day = new Date(selectedMonth);
     try {
       await axios
         .get(
-          `/date-schedule?year=${day.getFullYear()}&month=${day.getMonth()}&date[gte]=${day.getDate()}&sort=date`
+          `/date-schedule?year=${day.getFullYear()}&month=${day.getMonth()}&sort=date`
         )
         .then(res => {
-          setScheduleDate(res.data.data.data);
+          setScheduleData(prev => [...prev, res.data.data.data]);
           setIsLoading(false);
         });
     } catch (err) {
@@ -54,28 +53,68 @@ function Calendar() {
   };
 
   useEffect(() => {
-    fetchSchedule();
-    if (currentMonth === format(today, 'MMM-yyyy')) {
-      setMargin(today.getDate());
-    } else {
-      setMargin(1);
+    let curDate = selectedDay;
+
+    if (scheduleData.length > 0) {
+      // console.log(
+      //   scheduleData[curDate.getMonth() - today.getMonth()][
+      //     curDate.getDate() - 1
+      //   ].isFull
+      // );
+      console.log(curDate.setDate(curDate.getDate() + 1));
+      console.log(curDate.getDate(), curDate.getMonth());
+      // while (
+      //   scheduleData[curDate.getMonth() - today.getMonth()][
+      //     curDate.getDate() - 1
+      //   ].isFull
+      // ) {
+      //   curDate = new Date().setDate(curDate.getDate() + 1);
+      //   // console.log(curDate);
+      // }
     }
-  }, [currentMonth]);
+  }, [scheduleData]);
+
+  useEffect(() => {
+    if (getIndex(today, selectedMonth) >= scheduleData.length) {
+      fetchSchedule();
+    } else {
+      setIsLoading(false);
+    }
+  }, [selectedMonth]);
 
   function previousMonth() {
-    let firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
-    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
+    const firstDayPreviousMonth = add(firstDayCurrentMonth, { months: -1 });
+    setSelectedMonth(format(firstDayPreviousMonth, 'MMM-yyyy'));
+    if (firstDayPreviousMonth.getMonth() === today.getMonth()) {
+      setSelectedDay(today);
+    } else {
+      setSelectedDay(firstDayPreviousMonth);
+    }
   }
 
   function nextMonth() {
-    setIsLoading(true);
-    let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
-    setCurrentMonth(format(firstDayNextMonth, 'MMM-yyyy'));
+    const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
+    if (
+      firstDayNextMonth.getMonth() - today.getMonth() >=
+      scheduleData.length
+    ) {
+      setIsLoading(true);
+      setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
+      setSelectedDay(firstDayNextMonth);
+    } else {
+      setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
+      setSelectedDay(firstDayNextMonth);
+    }
   }
 
-  console.log(margin, scheduleData);
+  function handleOnClick(day) {
+    setSelectedDay(day);
+    setDateData(
+      scheduleData[getIndex(today, selectedMonth)][day.getDate() - 1]
+    );
+  }
   return (
-    <div className="pt-5">
+    <div className="pt-5 m-bottom--32">
       {!isLoading && (
         <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
           <div className="md:grid md:grid-cols-1 md:divide-x md:divide-gray-200 border">
@@ -89,11 +128,11 @@ function Calendar() {
                   onClick={previousMonth}
                   className={
                     '-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 none-border ' +
-                    (currentMonth === format(today, 'MMM-yyyy')
+                    (selectedMonth === format(today, 'MMM-yyyy')
                       ? 'text-gray-200'
                       : 'hover:text-gray-500')
                   }
-                  disabled={currentMonth === format(today, 'MMM-yyyy')}
+                  disabled={selectedMonth === format(today, 'MMM-yyyy')}
                 >
                   <span className="sr-only">Previous month</span>
                   <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
@@ -101,8 +140,13 @@ function Calendar() {
                 <button
                   onClick={nextMonth}
                   type="button"
-                  className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center 
-                p-1.5 text-gray-400 hover:text-gray-500 none-border"
+                  className={
+                    '-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 none-border ' +
+                    (getIndex(today, selectedMonth) > 0
+                      ? 'text-gray-200'
+                      : 'hover:text-gray-500')
+                  }
+                  disabled={getIndex(today, selectedMonth) > 0}
                 >
                   <span className="sr-only">Next month</span>
                   <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
@@ -128,12 +172,14 @@ function Calendar() {
                   >
                     <button
                       type="button"
-                      onClick={() => setSelectedDay(day)}
+                      onClick={() => handleOnClick(day)}
                       disabled={
                         !isLoading &&
                         (isToday(day) ||
                           isBefore(day, today) ||
-                          scheduleData[day.getDate() - margin].isFull)
+                          scheduleData[getIndex(today, selectedMonth)][
+                            day.getDate() - 1
+                          ].isFull)
                       }
                       className={classNames(
                         isEqual(day, selectedDay) && 'text-white',
@@ -142,8 +188,10 @@ function Calendar() {
                           'text-red-500 text-underline',
                         !isEqual(day, selectedDay) &&
                           isAfter(day, today) &&
-                          !scheduleData[day.getDate() - margin].isFull &&
-                          'text-blue-700',
+                          !scheduleData[getIndex(today, selectedMonth)][
+                            day.getDate() - 1
+                          ].isFull &&
+                          'text-blue-700 blue-border',
                         !isEqual(day, selectedDay) &&
                           !isToday(day) &&
                           !isSameMonth(day, firstDayCurrentMonth) &&
@@ -157,14 +205,18 @@ function Calendar() {
                         !isEqual(day, selectedDay) &&
                           !isToday(day) &&
                           !isBefore(day, today) &&
-                          !scheduleData[day.getDate() - margin].isFull &&
+                          !scheduleData[getIndex(today, selectedMonth)][
+                            day.getDate() - 1
+                          ].isFull &&
                           'hover:bg-gray-200',
                         (isEqual(day, selectedDay) || isToday(day)) &&
                           'font-semibold',
                         (isBefore(day, today) ||
-                          scheduleData[day.getDate() - margin].isFull) &&
-                          'text-gray-300',
-                        'mx-auto flex h-9 w-9 items-center justify-center rounded-full none-border font--bold'
+                          scheduleData[getIndex(today, selectedMonth)][
+                            day.getDate() - 1
+                          ].isFull) &&
+                          'text-gray-400',
+                        'mx-auto flex h-10 w-10 items-center justify-center rounded-full none-border font--bold'
                       )}
                     >
                       <time dateTime={format(day, 'yyyy-MM-dd')}>
@@ -182,7 +234,7 @@ function Calendar() {
   );
 }
 
-let colStartClasses = [
+const colStartClasses = [
   '',
   'col-start-2',
   'col-start-3',
@@ -191,5 +243,9 @@ let colStartClasses = [
   'col-start-6',
   'col-start-7'
 ];
+
+const getIndex = (today, cur) => {
+  return new Date(cur).getMonth() - today.getMonth();
+};
 
 export default Calendar;

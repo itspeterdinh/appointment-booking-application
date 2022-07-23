@@ -6,6 +6,9 @@
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
 }
+.blue-border {
+  border: 1px solid rgb(59 130 246 / var(--tw-text-opacity));
+}
 .pd-1 {
   padding: 0.8rem;
 }
