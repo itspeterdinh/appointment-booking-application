@@ -54,25 +54,38 @@ function Calendar({ setDateData }) {
 
   useEffect(() => {
     let curDate = selectedDay;
-
-    if (scheduleData.length > 0) {
-      // console.log(
-      //   scheduleData[curDate.getMonth() - today.getMonth()][
-      //     curDate.getDate() - 1
-      //   ].isFull
-      // );
-      console.log(curDate.setDate(curDate.getDate() + 1));
-      console.log(curDate.getDate(), curDate.getMonth());
-      // while (
-      //   scheduleData[curDate.getMonth() - today.getMonth()][
-      //     curDate.getDate() - 1
-      //   ].isFull
-      // ) {
-      //   curDate = new Date().setDate(curDate.getDate() + 1);
-      //   // console.log(curDate);
-      // }
+    const index = curDate.getMonth() - today.getMonth();
+    if (scheduleData.length > index) {
+      while (
+        scheduleData[curDate.getMonth() - today.getMonth()][
+          curDate.getDate() - 1
+        ].isFull
+      ) {
+        curDate.setDate(curDate.getDate() + 1);
+      }
+      console.log('2');
+      console.log(selectedDay);
+      setSelectedDay(curDate);
+      setSelectedMonth(format(curDate, 'MMM-yyyy'));
     }
-  }, [scheduleData]);
+  }, [selectedMonth, scheduleData]);
+
+  // const findFirstAvailability = () => {
+  //   let curDate = selectedDay;
+  //   const index = curDate.getMonth() - today.getMonth();
+  //   if (scheduleData.length > index) {
+  //     while (
+  //       scheduleData[curDate.getMonth() - today.getMonth()][
+  //         curDate.getDate() - 1
+  //       ].isFull
+  //     ) {
+  //       curDate.setDate(curDate.getDate() + 1);
+  //       setSelectedDay(curDate);
+  //     }
+  //     console.log('2');
+  //     setSelectedMonth(format(curDate, 'MMM-yyyy'));
+  //   }
+  // };
 
   useEffect(() => {
     if (getIndex(today, selectedMonth) >= scheduleData.length) {
@@ -84,11 +97,12 @@ function Calendar({ setDateData }) {
 
   function previousMonth() {
     const firstDayPreviousMonth = add(firstDayCurrentMonth, { months: -1 });
-    setSelectedMonth(format(firstDayPreviousMonth, 'MMM-yyyy'));
     if (firstDayPreviousMonth.getMonth() === today.getMonth()) {
       setSelectedDay(today);
+      setSelectedMonth(format(today, 'MMM-yyyy'));
     } else {
       setSelectedDay(firstDayPreviousMonth);
+      setSelectedMonth(format(firstDayPreviousMonth, 'MMM-yyyy'));
     }
   }
 
@@ -99,12 +113,10 @@ function Calendar({ setDateData }) {
       scheduleData.length
     ) {
       setIsLoading(true);
-      setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
-      setSelectedDay(firstDayNextMonth);
-    } else {
-      setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
-      setSelectedDay(firstDayNextMonth);
     }
+    setSelectedDay(firstDayNextMonth);
+    console.log('1');
+    setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
   }
 
   function handleOnClick(day) {
