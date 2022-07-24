@@ -8,4 +8,8 @@ router
   .get(dateScheduleController.getAllDate)
   .post(dateScheduleController.createDateSchedule);
 
+// router
+//   .route('/check-availability/:id')
+//   .post(dateScheduleController.checkAvailability);
+
 module.exports = router;

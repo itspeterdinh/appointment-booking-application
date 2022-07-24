@@ -36,9 +36,9 @@ function App() {
   };
 
   useEffect(() => {
-    Promise.all([fetchBusiness(), fetchServices()]).then(() =>
-      setIsLoading(false)
-    );
+    Promise.all([fetchBusiness(), fetchServices()]).then(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   return (

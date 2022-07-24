@@ -20,7 +20,7 @@ function ApmtTime({ dateData }) {
         <div className="ember-view grid-col grid-col-1-3-m grid-col-1-1-xs">
           <div className="appointment-time-items w-background-light">
             {dateData.schedule
-              ?.filter(el => !el.isBooking)
+              ?.filter(el => !el.isBooked)
               .map(el => {
                 return (
                   <button

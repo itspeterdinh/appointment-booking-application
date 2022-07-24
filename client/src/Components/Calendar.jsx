@@ -52,7 +52,7 @@ function Calendar({ setDateData }) {
     }
   };
 
-  useEffect(() => {
+  const findFirstAvailability = selectedDay => {
     let curDate = selectedDay;
     const index = curDate.getMonth() - today.getMonth();
     if (scheduleData.length > index) {
@@ -63,29 +63,15 @@ function Calendar({ setDateData }) {
       ) {
         curDate.setDate(curDate.getDate() + 1);
       }
-      console.log('2');
-      console.log(selectedDay);
       setSelectedDay(curDate);
       setSelectedMonth(format(curDate, 'MMM-yyyy'));
+      setDateData(
+        scheduleData[getIndex(today, format(curDate, 'MMM-yyyy'))][
+          curDate.getDate() - 1
+        ]
+      );
     }
-  }, [selectedMonth, scheduleData]);
-
-  // const findFirstAvailability = () => {
-  //   let curDate = selectedDay;
-  //   const index = curDate.getMonth() - today.getMonth();
-  //   if (scheduleData.length > index) {
-  //     while (
-  //       scheduleData[curDate.getMonth() - today.getMonth()][
-  //         curDate.getDate() - 1
-  //       ].isFull
-  //     ) {
-  //       curDate.setDate(curDate.getDate() + 1);
-  //       setSelectedDay(curDate);
-  //     }
-  //     console.log('2');
-  //     setSelectedMonth(format(curDate, 'MMM-yyyy'));
-  //   }
-  // };
+  };
 
   useEffect(() => {
     if (getIndex(today, selectedMonth) >= scheduleData.length) {
@@ -95,14 +81,16 @@ function Calendar({ setDateData }) {
     }
   }, [selectedMonth]);
 
+  useEffect(() => {
+    findFirstAvailability(selectedDay);
+  }, [scheduleData]);
+
   function previousMonth() {
     const firstDayPreviousMonth = add(firstDayCurrentMonth, { months: -1 });
     if (firstDayPreviousMonth.getMonth() === today.getMonth()) {
-      setSelectedDay(today);
-      setSelectedMonth(format(today, 'MMM-yyyy'));
+      findFirstAvailability(today);
     } else {
-      setSelectedDay(firstDayPreviousMonth);
-      setSelectedMonth(format(firstDayPreviousMonth, 'MMM-yyyy'));
+      findFirstAvailability(firstDayPreviousMonth);
     }
   }
 
@@ -113,10 +101,11 @@ function Calendar({ setDateData }) {
       scheduleData.length
     ) {
       setIsLoading(true);
+      setSelectedDay(firstDayNextMonth);
+      setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
+    } else {
+      findFirstAvailability(firstDayNextMonth);
     }
-    setSelectedDay(firstDayNextMonth);
-    console.log('1');
-    setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
   }
 
   function handleOnClick(day) {
@@ -127,52 +116,52 @@ function Calendar({ setDateData }) {
   }
   return (
     <div className="pt-5 m-bottom--32">
-      {!isLoading && (
-        <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
-          <div className="md:grid md:grid-cols-1 md:divide-x md:divide-gray-200 border">
-            <div className="md:pr-0">
-              <div className="flex items-center pd-1 border-bottom">
-                <h2 className="flex-auto font-semibold text-gray-800">
-                  {format(firstDayCurrentMonth, 'MMM yyyy')}
-                </h2>
-                <button
-                  type="button"
-                  onClick={previousMonth}
-                  className={
-                    '-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 none-border ' +
-                    (selectedMonth === format(today, 'MMM-yyyy')
-                      ? 'text-gray-200'
-                      : 'hover:text-gray-500')
-                  }
-                  disabled={selectedMonth === format(today, 'MMM-yyyy')}
-                >
-                  <span className="sr-only">Previous month</span>
-                  <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
-                </button>
-                <button
-                  onClick={nextMonth}
-                  type="button"
-                  className={
-                    '-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 none-border ' +
-                    (getIndex(today, selectedMonth) > 0
-                      ? 'text-gray-200'
-                      : 'hover:text-gray-500')
-                  }
-                  disabled={getIndex(today, selectedMonth) > 0}
-                >
-                  <span className="sr-only">Next month</span>
-                  <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
-                </button>
-              </div>
-              <div className="grid grid-cols-7 mt-5 text-xs leading-6 text-center text-gray-1300">
-                <div>S</div>
-                <div>M</div>
-                <div>T</div>
-                <div>W</div>
-                <div>T</div>
-                <div>F</div>
-                <div>S</div>
-              </div>
+      <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
+        <div className="md:grid md:grid-cols-1 md:divide-x md:divide-gray-200 border">
+          <div className="md:pr-0">
+            <div className="flex items-center pd-1 border-bottom">
+              <h2 className="flex-auto font-semibold text-gray-800">
+                {format(firstDayCurrentMonth, 'MMM yyyy')}
+              </h2>
+              <button
+                type="button"
+                onClick={previousMonth}
+                className={
+                  '-my-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 none-border ' +
+                  (selectedMonth === format(today, 'MMM-yyyy')
+                    ? 'text-gray-200'
+                    : 'hover:text-gray-500')
+                }
+                disabled={selectedMonth === format(today, 'MMM-yyyy')}
+              >
+                <span className="sr-only">Previous month</span>
+                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+              </button>
+              <button
+                onClick={nextMonth}
+                type="button"
+                className={
+                  '-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 none-border ' +
+                  (getIndex(today, selectedMonth) > 0
+                    ? 'text-gray-200'
+                    : 'hover:text-gray-500')
+                }
+                disabled={getIndex(today, selectedMonth) > 0}
+              >
+                <span className="sr-only">Next month</span>
+                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="grid grid-cols-7 mt-5 text-xs leading-6 text-center text-gray-1300">
+              <div>S</div>
+              <div>M</div>
+              <div>T</div>
+              <div>W</div>
+              <div>T</div>
+              <div>F</div>
+              <div>S</div>
+            </div>
+            {!isLoading ? (
               <div className="grid grid-cols-7 mt-2 mb-2 text-sm">
                 {days.map((day, dayIdx) => (
                   <div
@@ -238,10 +227,20 @@ function Calendar({ setDateData }) {
                   </div>
                 ))}
               </div>
-            </div>
+            ) : (
+              <div className="grid grid-cols-7 mt-2 mb-2 text-sm">
+                {Array(35)
+                  .fill(1)
+                  .map((el, index) => (
+                    <div className="py-1.5" key={index}>
+                      <button className="mx-auto flex h-10 w-10 bg-gray-100 justify-center items-center rounded-full"></button>
+                    </div>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
