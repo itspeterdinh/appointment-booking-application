@@ -36,6 +36,8 @@ function Calendar({ setDateData }) {
     end: endOfMonth(firstDayCurrentMonth)
   });
 
+  console.log(firstDayCurrentMonth.getMonth());
+
   const fetchSchedule = async () => {
     const day = new Date(selectedMonth);
     try {
@@ -186,7 +188,7 @@ function Calendar({ setDateData }) {
                         isEqual(day, selectedDay) && 'text-white',
                         !isEqual(day, selectedDay) &&
                           isToday(day) &&
-                          'text-red-500 text-underline',
+                          'text-red-500',
                         !isEqual(day, selectedDay) &&
                           isAfter(day, today) &&
                           !scheduleData[getIndex(today, selectedMonth)][
@@ -256,10 +258,8 @@ const colStartClasses = [
 ];
 
 const getIndex = (today, cur) => {
-  const selectedMonth = new Date(cur);
-  console.log(selectedMonth, cur);
-  console.log(new Date(cur).getMonth(), today.getMonth());
-  return new Date(cur).getMonth() - today.getMonth();
+  // const temp = parse(cur, 'MMM-yyyy', new Date());
+  return parse(cur, 'MMM-yyyy', new Date()).getMonth() - today.getMonth();
 };
 
 export default Calendar;
