@@ -175,12 +175,12 @@ function Calendar({ setDateData }) {
                       type="button"
                       onClick={() => handleOnClick(day)}
                       disabled={
-                        !isLoading &&
-                        (isToday(day) ||
-                          isBefore(day, today) ||
-                          scheduleData[getIndex(today, selectedMonth)][
-                            day.getDate() - 1
-                          ].isFull)
+                        // !isLoading &&
+                        isToday(day) ||
+                        isBefore(day, today) ||
+                        scheduleData[getIndex(today, selectedMonth)][
+                          day.getDate() - 1
+                        ].isFull
                       }
                       className={classNames(
                         isEqual(day, selectedDay) && 'text-white',
@@ -256,6 +256,9 @@ const colStartClasses = [
 ];
 
 const getIndex = (today, cur) => {
+  const selectedMonth = new Date(cur);
+  console.log(selectedMonth, cur);
+  console.log(new Date(cur).getMonth(), today.getMonth());
   return new Date(cur).getMonth() - today.getMonth();
 };
 
