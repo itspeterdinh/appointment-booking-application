@@ -6,7 +6,7 @@ const cors = require('cors');
 
 const businessRouter = require('./routes/businessRoutes');
 const servicesRouter = require('./routes/serviceRoutes');
-const dateScheduleRouter = require('./routes/dateScheduleRoutes');
+const dateRouter = require('./routes/dateRoutes');
 
 const app = express();
 app.enable('trust proxy');
@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 
 app.use('/businesses', businessRouter);
 app.use('/services', servicesRouter);
-app.use('/date-schedule', dateScheduleRouter);
+app.use('/date', dateRouter);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

@@ -36,14 +36,11 @@ function Calendar({ setDateData }) {
     end: endOfMonth(firstDayCurrentMonth)
   });
 
-  console.log(firstDayCurrentMonth.getMonth());
-
   const fetchSchedule = async () => {
-    const day = new Date(selectedMonth);
     try {
       await axios
         .get(
-          `/date-schedule?year=${day.getFullYear()}&month=${day.getMonth()}&sort=date`
+          `/date?year=${firstDayCurrentMonth.getFullYear()}&month=${firstDayCurrentMonth.getMonth()}&sort=date`
         )
         .then(res => {
           setScheduleData(prev => [...prev, res.data.data.data]);
@@ -177,7 +174,6 @@ function Calendar({ setDateData }) {
                       type="button"
                       onClick={() => handleOnClick(day)}
                       disabled={
-                        // !isLoading &&
                         isToday(day) ||
                         isBefore(day, today) ||
                         scheduleData[getIndex(today, selectedMonth)][
