@@ -25,15 +25,16 @@ const dateSchema = new mongoose.Schema({
   ]
 });
 
-// dateSchema.pre('save', function(next) {
-//   next();
-// });
-
 dateSchema.methods.checkAvailability = function(index) {
   if (!this.schedule[index].isBooked) {
     this.schedule[index].isBooked = true;
     return true;
   } else return false;
+};
+
+dateSchema.methods.cancelBooking = function(index) {
+  this.schedule[index].isBooked = false;
+  return true;
 };
 
 const DateS = mongoose.model('DateS', dateSchema);

@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.grid-cols-7 {
+  grid-template-columns: repeat(7);
+  /* grid-template-rows: repeat(6); */
+}
+.displayNone {
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.3s;
+}
 .py-1\.5 {
   padding-top: 0.3rem;
   padding-bottom: 0.3rem;
@@ -2133,7 +2142,7 @@ body,
   height: 16px;
   margin-top: 5px;
   margin-right: 16px;
-  display: block;
+  display: flex;
   position: absolute;
 }
 .data-descriptive-icon + * {
@@ -2163,6 +2172,10 @@ body,
 }
 .obs-icon--social-instagram {
   background: url(https://appointments-production-f.squarecdn.com/appointments/assets/obs/social-instagram.svg);
+}
+.obs-icon--error {
+  background: url(https://appointments-production-f.squarecdn.com/appointments/assets/obs/alert-triangle-filled-518fe3c21f3aeea392b29f229f3d71bae5e9fead1fd808729ecdedc3e4b7aa20.svg);
+  margin-top: 2px;
 }
 /*
 .obs-icon--globe {
@@ -3360,16 +3373,19 @@ body,
 }
 .flash-message--is-visible {
   display: block;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(0, 0);
+  transition: all 0.3s;
 }
 .flash-message--is-error {
   color: #cc0023;
 }
 .flash-message--is-error .flash-message__body:before {
-  /* background: url(/appointments/assets/obs/alert-triangle-filled-518fe3c21f3aeea392b29f229f3d71bae5e9fead1fd808729ecdedc3e4b7aa20.svg); */
+  background: url(https://appointments-production-f.squarecdn.com/appointments/assets/obs/alert-triangle-filled-518fe3c21f3aeea392b29f229f3d71bae5e9fead1fd808729ecdedc3e4b7aa20.svg);
   width: 16px;
   height: 16px;
   content: '';
-  vertical-align: bottom;
+  /* vertical-align: bottom; */
   display: inline-block;
   margin-right: 16px;
 }

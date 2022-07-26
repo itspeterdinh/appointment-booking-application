@@ -8,6 +8,7 @@ import AppContext from '../Contexts/app-context';
 function Date() {
   const ctx = useContext(AppContext);
   const [dateData, setDateData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,8 +27,12 @@ function Date() {
           <h3 className="font--bold m-bottom--8">
             Select your preferred date and time
           </h3>
-          <Calendar setDateData={setDateData} />
-          <ApmtTime dateData={dateData} />
+          <Calendar
+            setDateData={setDateData}
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+          />
+          <ApmtTime dateData={dateData} isLoading={isLoading} />
         </div>
       </section>
     </section>

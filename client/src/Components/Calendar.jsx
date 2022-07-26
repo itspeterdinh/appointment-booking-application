@@ -23,12 +23,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-function Calendar({ setDateData }) {
+function Calendar({ setDateData, isLoading, setIsLoading }) {
   const today = startOfToday();
   const [selectedDay, setSelectedDay] = useState(today);
   const [selectedMonth, setSelectedMonth] = useState(format(today, 'MMM-yyyy'));
   const [scheduleData, setScheduleData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const firstDayCurrentMonth = parse(selectedMonth, 'MMM-yyyy', new Date());
 
   const days = eachDayOfInterval({
@@ -224,10 +224,17 @@ function Calendar({ setDateData }) {
                     </button>
                   </div>
                 ))}
+                <div className="py-1.5"></div>
+                <div className="py-1.5"></div>
+                <div className="py-1.5"></div>
+                <div className="py-1.5"></div>
+                <div className="py-1.5">
+                  <div className="h-10 w-10"></div>
+                </div>
               </div>
             ) : (
               <div className="grid grid-cols-7 mt-2 mb-2 text-sm">
-                {Array(35)
+                {Array(42)
                   .fill(1)
                   .map((el, index) => (
                     <div className="py-1.5" key={index}>
