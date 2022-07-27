@@ -45,17 +45,22 @@ function App() {
     <Router>
       {!isLoading && (
         <div className="App">
-          <Header name={business.name} avatar={business.avatar} />
-          <Routes>
-            <Route
-              path="/"
-              element={<Section business={business} services={services} />}
-            />
-            <Route path="/service" element={<Service services={services} />} />
-            <Route path="/date" element={<CDate />} />
-            <Route path="/contact" element={<Contact />} />
-          </Routes>
-          <ToolBar />
+          <div className="page-layout page-layout--flex">
+            <Header name={business.name} avatar={business.avatar} />
+            <Routes>
+              <Route
+                path="/"
+                element={<Section business={business} services={services} />}
+              />
+              <Route
+                path="/service"
+                element={<Service services={services} />}
+              />
+              <Route path="/date" element={<CDate />} />
+              <Route path="/contact" element={<Contact />} />
+            </Routes>
+            <ToolBar />
+          </div>
         </div>
       )}
     </Router>
