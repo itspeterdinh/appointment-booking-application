@@ -3,7 +3,6 @@ const DateS = require('../models/dateModel');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
-const { getDaysInMonth } = require('date-fns');
 
 exports.createDateSchedule = factory.createOne(DateS);
 
@@ -76,8 +75,8 @@ exports.getAllDate = catchAsync(async (req, res, next) => {
 
 exports.createDateDocuments = catchAsync(async (req, res, next) => {
   const year = 2022;
-  const month = 6;
-  const daysInMonth = getDaysInMonth(year, month + 1);
+  const month = 8;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   let i = 1;
   while (i <= daysInMonth) {
@@ -86,8 +85,41 @@ exports.createDateDocuments = catchAsync(async (req, res, next) => {
       month: month,
       date: i,
       isFull: false,
-      schedule: []
+      schedule: [
+        {
+          time: 9,
+          isBooked: false,
+          phone: '',
+          email: ''
+        },
+        {
+          time: 10,
+          isBooked: false,
+          phone: '',
+          email: ''
+        },
+        {
+          time: 11,
+          isBooked: false,
+          phone: '',
+          email: ''
+        },
+        {
+          time: 12,
+          isBooked: false,
+          phone: '',
+          email: ''
+        },
+        {
+          time: 13,
+          isBooked: false,
+          phone: '',
+          email: ''
+        }
+      ]
     };
+    await DateS.create(date);
+    i += 1;
   }
 
   res.status(200).json({
