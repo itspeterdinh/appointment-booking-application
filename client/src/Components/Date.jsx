@@ -32,7 +32,7 @@ function Date() {
             isLoading={isLoading}
             setIsLoading={setIsLoading}
           />
-          <ApmtTime dateData={dateData} isLoading={isLoading} />
+          {dateData && <ApmtTime dateData={dateData} isLoading={isLoading} />}
         </div>
       </section>
     </section>

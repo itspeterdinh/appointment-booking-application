@@ -1,9 +1,26 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import axios from 'axios';
 import React from 'react';
 
 function ApmtTime({ dateData, isLoading }) {
   const date = new Date();
   date.setFullYear(dateData.year, dateData.month, dateData.date);
+
+  const checkAvaibility = async index => {
+    try {
+      await axios
+        .patch(`/date/check-availability/${dateData._id}?index=${index}`)
+        .then(res => {
+          console.log(res.data.data);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleOnClick = index => {
+    checkAvaibility(index);
+  };
 
   return (
     <>
@@ -25,12 +42,13 @@ function ApmtTime({ dateData, isLoading }) {
               <div className="appointment-time-items w-background-light">
                 {dateData.schedule
                   ?.filter(el => !el.isBooked)
-                  .map(el => {
+                  .map((el, index) => {
                     return (
                       <button
                         key={el._id}
                         type="button"
                         className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
+                        onClick={() => handleOnClick(index)}
                       >
                         {el.time + ':00 pm'}
                       </button>
