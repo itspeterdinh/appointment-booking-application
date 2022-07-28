@@ -6,7 +6,7 @@ import './Styles/globals.css';
 import Header from './Components/Header';
 import Section from './Components/Section';
 import Service from './Components/Service';
-import CDate from './Components/Date';
+import DateCompo from './Components/DateCompo';
 import Contact from './Components/Contact';
 import ToolBar from './Components/ToolBar';
 
@@ -56,7 +56,7 @@ function App() {
                 path="/service"
                 element={<Service services={services} />}
               />
-              <Route path="/date" element={<CDate />} />
+              <Route path="/date" element={<DateCompo />} />
               <Route path="/contact" element={<Contact />} />
             </Routes>
             <ToolBar />

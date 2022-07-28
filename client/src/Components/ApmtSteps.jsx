@@ -57,7 +57,24 @@ function ApmtSteps(props) {
         }
       >
         <div className="font--bold m-bottom--16 link--browser">
-          <h5 className="sidebar-section-title">Select date and time</h5>
+          {ctx.selectedTime.dateData ? (
+            <>
+              <h5 className="sidebar-section-title sidebar-section-title--complete">
+                Date and time
+              </h5>
+              {props.step !== 'date' && ' · '}
+              {props.step !== 'date' && (
+                <span
+                  className="sidebar-multi-service-selection--selection 
+                sidebar-multi-service-selection--selection--edit"
+                >
+                  <Link to="/date">Edit</Link>
+                </span>
+              )}
+            </>
+          ) : (
+            <h5 className="sidebar-section-title">Select date and time</h5>
+          )}
         </div>
         <div className="sidebar-section-details">
           {ctx.selectedTime.dateData && (

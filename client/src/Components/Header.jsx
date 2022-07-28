@@ -1,10 +1,19 @@
-import React, { useContext } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AppContext from '../Contexts/app-context';
 
 function Header(props) {
   const ctx = useContext(AppContext);
   const path = useLocation();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ctx.setError(false);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [ctx.error]);
 
   return (
     <div className="widget-header w-background-light">

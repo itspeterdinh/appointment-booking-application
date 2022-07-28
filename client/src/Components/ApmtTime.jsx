@@ -2,11 +2,63 @@
 import axios from 'axios';
 import React, { useContext } from 'react';
 import AppContext from '../Contexts/app-context';
+import { format, startOfToday, parse } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
-function ApmtTime({ dateData, isLoading }) {
+function ApmtTime({
+  dateData,
+  setDateData,
+  isLoading,
+  setIsLoading,
+  selectedDay,
+  setSelectedDay,
+  setScheduleData,
+  firstDayCurrentMonth
+}) {
   const ctx = useContext(AppContext);
+  const today = startOfToday();
   const date = new Date();
+  const navigate = useNavigate();
   date.setFullYear(dateData.year, dateData.month, dateData.date);
+
+  const fetchSchedule = async () => {
+    try {
+      await axios
+        .get(
+          `/date?year=${firstDayCurrentMonth.getFullYear()}&month=${firstDayCurrentMonth.getMonth()}&sort=date`
+        )
+        .then(res => {
+          let firstAvailableDate = undefined;
+          if (res.data.data.firstAvaiDate) {
+            firstAvailableDate = new Date(
+              res.data.data.firstAvaiDate.year,
+              res.data.data.firstAvaiDate.month,
+              res.data.data.firstAvaiDate.date
+            );
+            setSelectedDay(selectedDay);
+            setDateData(res.data.data.data[selectedDay.getDate() - 1]);
+          }
+          setScheduleData(prev => {
+            return prev.map((el, index) => {
+              if (
+                index ===
+                getIndex(today, format(firstDayCurrentMonth, 'MMM-yyyy'))
+              ) {
+                return {
+                  dateByMonth: res.data.data.data,
+                  firstAvailableDate: firstAvailableDate
+                };
+              } else {
+                return el;
+              }
+            });
+          });
+          setIsLoading(false);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const cancelBooking = async data => {
     try {
@@ -26,13 +78,15 @@ function ApmtTime({ dateData, isLoading }) {
         .patch(`/date/check-availability/${dateData._id}?index=${index}`)
         .then(res => {
           if (res.data.data.isAvailable) {
-            console.log(res.data.data.isAvailable);
             if (ctx.selectedTime.dateData) {
               cancelBooking(ctx.selectedTime);
             }
             ctx.setSelectedTime({ dateData: dateData, index: index });
+            navigate('/contact');
           } else {
             ctx.setError(true);
+            setIsLoading(true);
+            fetchSchedule();
           }
         });
     } catch (err) {
@@ -85,6 +139,11 @@ function ApmtTime({ dateData, isLoading }) {
     </>
   );
 }
+
+const getIndex = (today, cur) => {
+  // const temp = parse(cur, 'MMM-yyyy', new Date());
+  return parse(cur, 'MMM-yyyy', new Date()).getMonth() - today.getMonth();
+};
 
 const formatDate = date => {
   date = date.split(' ');

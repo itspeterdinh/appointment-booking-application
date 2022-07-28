@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import {
@@ -23,12 +23,19 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-function Calendar({ setDateData, isLoading, setIsLoading }) {
+function Calendar({
+  setDateData,
+  isLoading,
+  setIsLoading,
+  selectedDay,
+  selectedMonth,
+  scheduleData,
+  setSelectedDay,
+  setSelectedMonth,
+  setScheduleData,
+  firstDayCurrentMonth
+}) {
   const today = startOfToday();
-  const [selectedDay, setSelectedDay] = useState(today);
-  const [selectedMonth, setSelectedMonth] = useState(format(today, 'MMM-yyyy'));
-  const [scheduleData, setScheduleData] = useState([]);
-  const firstDayCurrentMonth = parse(selectedMonth, 'MMM-yyyy', new Date());
 
   const days = eachDayOfInterval({
     start: firstDayCurrentMonth,
@@ -96,7 +103,10 @@ function Calendar({ setDateData, isLoading, setIsLoading }) {
     } else {
       setDateData(undefined);
     }
-    setSelectedDay(selectedDay);
+    setSelectedDay(
+      scheduleData[getIndex(today, format(firstDayPreviousMonth, 'MMM-yyyy'))]
+        .firstAvailableDate
+    );
     setSelectedMonth(format(firstDayPreviousMonth, 'MMM-yyyy'));
   }
 
@@ -273,7 +283,6 @@ const colStartClasses = [
 ];
 
 const getIndex = (today, cur) => {
-  // const temp = parse(cur, 'MMM-yyyy', new Date());
   return parse(cur, 'MMM-yyyy', new Date()).getMonth() - today.getMonth();
 };
 

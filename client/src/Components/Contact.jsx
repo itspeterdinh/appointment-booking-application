@@ -1,8 +1,18 @@
-import React from 'react';
-
+import React, { useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AppContext from '../Contexts/app-context';
 import ApmtSteps from './ApmtSteps';
 
 function Contact() {
+  const navigate = useNavigate();
+  const ctx = useContext(AppContext);
+
+  useEffect(() => {
+    if (!ctx.selectedTime.dateData) {
+      navigate('/date');
+    }
+  }, [ctx.selectedTime.dateData, navigate]);
+
   return (
     <section className="container landing">
       <section className="row">

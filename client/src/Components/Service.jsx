@@ -20,11 +20,6 @@ function Service({ services }) {
                 key={'svc' + index}
                 index={index}
                 service={service}
-                // id={data._id}
-                // name={data.name}
-                // price={data.price}
-                // time={data.time}
-                // description={data.description}
               />
             );
           })}
