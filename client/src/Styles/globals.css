@@ -10,6 +10,7 @@
   visibility: hidden;
   opacity: 0;
   transition: all 0.3s;
+  height: 0px;
 }
 .py-1\.5 {
   padding-top: 0.3rem;

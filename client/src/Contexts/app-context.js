@@ -4,12 +4,18 @@ const AppContext = React.createContext({
   state: false,
   element: Set,
   selectedServices: [],
-  setSelectedServices: () => {}
+  setSelectedServices: () => {},
+  selectedTime: {},
+  setSelectedTime: () => {},
+  error: false,
+  setError: () => {}
 });
 
 export const AppContextProvider = props => {
   const [state, setState] = useState(false);
+  const [error, setError] = useState(false);
   const [selectedServices, setSelectedServices] = useState([]);
+  const [selectedTime, setSelectedTime] = useState({});
   const [element, setElement] = useState(new Set());
 
   const handleSelectedServices = (action, item) => {
@@ -76,7 +82,11 @@ export const AppContextProvider = props => {
         element: element,
         state: state,
         selectedServices: selectedServices,
-        setSelectedServices: handleSelectedServices
+        setSelectedServices: handleSelectedServices,
+        selectedTime: selectedTime,
+        setSelectedTime: setSelectedTime,
+        error: error,
+        setError: setError
       }}
     >
       {props.children}

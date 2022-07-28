@@ -1,15 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import axios from 'axios';
-import React from 'react';
+import React, { useContext } from 'react';
+import AppContext from '../Contexts/app-context';
 
 function ApmtTime({ dateData, isLoading }) {
+  const ctx = useContext(AppContext);
   const date = new Date();
   date.setFullYear(dateData.year, dateData.month, dateData.date);
 
-  const checkAvaibility = async index => {
+  const cancelBooking = async data => {
     try {
       await axios
-        .patch(`/date/check-availability/${dateData._id}?index=${index}`)
+        .patch(`/date/cancel-booking/${data.dateData._id}?index=${data.index}`)
         .then(res => {
           console.log(res.data.data);
         });
@@ -18,7 +20,25 @@ function ApmtTime({ dateData, isLoading }) {
     }
   };
 
+  const checkAvaibility = async index => {
+    try {
+      await axios
+        .patch(`/date/check-availability/${dateData._id}?index=${index}`)
+        .then(res => {
+          if (res.data.data.isAvailable) {
+            if (ctx.selectedTime.dateData) {
+              cancelBooking(ctx.selectedTime);
+            }
+            ctx.setSelectedTime({ dateData: dateData, index: index });
+          }
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const handleOnClick = index => {
+    console.log(dateData);
     checkAvaibility(index);
   };
 
@@ -41,8 +61,9 @@ function ApmtTime({ dateData, isLoading }) {
             <div className="ember-view grid-col grid-col-1-3-m grid-col-1-1-xs">
               <div className="appointment-time-items w-background-light">
                 {dateData.schedule
-                  ?.filter(el => !el.isBooked)
-                  .map((el, index) => {
+                  ?.map((el, index) => ({ el, index }))
+                  .filter(({ el }) => !el.isBooked)
+                  .map(({ el, index }) => {
                     return (
                       <button
                         key={el._id}
@@ -50,7 +71,7 @@ function ApmtTime({ dateData, isLoading }) {
                         className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
                         onClick={() => handleOnClick(index)}
                       >
-                        {el.time + ':00 pm'}
+                        {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'}
                       </button>
                     );
                   })}

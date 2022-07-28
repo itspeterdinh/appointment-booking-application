@@ -15,13 +15,13 @@ exports.checkAvailability = catchAsync(async (req, res, next) => {
     return next(new AppError('No date found with that ID', 404));
   }
 
-  const isBooked = date.checkAvailability(req.query.index);
+  const isAvailable = date.checkAvailability(req.query.index);
   await date.save();
 
   res.status(200).json({
     status: 'success',
     data: {
-      isBooked: isBooked
+      isAvailable: isAvailable
     }
   });
 });
@@ -75,7 +75,7 @@ exports.getAllDate = catchAsync(async (req, res, next) => {
 
 exports.createDateDocuments = catchAsync(async (req, res, next) => {
   const year = 2022;
-  const month = 8;
+  const month = 6;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   let i = 1;
@@ -87,30 +87,35 @@ exports.createDateDocuments = catchAsync(async (req, res, next) => {
       isFull: false,
       schedule: [
         {
+          something: 0,
           time: 9,
           isBooked: false,
           phone: '',
           email: ''
         },
         {
+          something: 1,
           time: 10,
           isBooked: false,
           phone: '',
           email: ''
         },
         {
+          something: 2,
           time: 11,
           isBooked: false,
           phone: '',
           email: ''
         },
         {
+          something: 3,
           time: 12,
           isBooked: false,
           phone: '',
           email: ''
         },
         {
+          something: 4,
           time: 13,
           isBooked: false,
           phone: '',

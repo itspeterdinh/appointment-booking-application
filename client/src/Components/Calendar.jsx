@@ -157,11 +157,11 @@ function Calendar({ setDateData, isLoading, setIsLoading }) {
                 type="button"
                 className={
                   '-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 none-border ' +
-                  (getIndex(today, selectedMonth) > 0
+                  (getIndex(today, selectedMonth) > 1
                     ? 'text-gray-200'
                     : 'hover:text-gray-500')
                 }
-                disabled={getIndex(today, selectedMonth) > 0}
+                disabled={getIndex(today, selectedMonth) > 1}
               >
                 <span className="sr-only">Next month</span>
                 <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />

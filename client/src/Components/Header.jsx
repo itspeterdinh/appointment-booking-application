@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import AppContext from '../Contexts/app-context';
 
 function Header(props) {
+  const ctx = useContext(AppContext);
   const path = useLocation();
 
   return (
@@ -38,23 +40,25 @@ function Header(props) {
           </div>
         </div>
       </header>
-      <div className="ember-view flash-message flash-message--is-visible displayNone">
-        <div className="container w-background-light">
-          <div className="row">
-            <div className="col col-12">
-              <div className="card card--secondary flash-message__wrapper">
-                <div className="flash-message__body link--browser font--small flash-message--is-error .flash-message__body">
-                  <span className="data-descriptive-icon obs-icon--error"></span>
-                  <p className="flash-message--is-error .flash-message__body">
-                    We apologize, the time you selected is no longer available.
-                    Please select another time.
-                  </p>
+      {ctx.error && (
+        <div className={'ember-view flash-message flash-message--is-visible'}>
+          <div className="container w-background-light">
+            <div className="row">
+              <div className="col col-12">
+                <div className="card card--secondary flash-message__wrapper">
+                  <div className="flash-message__body link--browser font--small flash-message--is-error .flash-message__body">
+                    <span className="data-descriptive-icon obs-icon--error"></span>
+                    <p className="flash-message--is-error .flash-message__body">
+                      We apologize, the time you selected is no longer
+                      available. Please select another time.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
