@@ -26,10 +26,13 @@ function ApmtTime({ dateData, isLoading }) {
         .patch(`/date/check-availability/${dateData._id}?index=${index}`)
         .then(res => {
           if (res.data.data.isAvailable) {
+            console.log(res.data.data.isAvailable);
             if (ctx.selectedTime.dateData) {
               cancelBooking(ctx.selectedTime);
             }
             ctx.setSelectedTime({ dateData: dateData, index: index });
+          } else {
+            ctx.setError(true);
           }
         });
     } catch (err) {
@@ -38,7 +41,6 @@ function ApmtTime({ dateData, isLoading }) {
   };
 
   const handleOnClick = index => {
-    console.log(dateData);
     checkAvaibility(index);
   };
 

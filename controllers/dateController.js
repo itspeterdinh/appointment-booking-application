@@ -87,35 +87,30 @@ exports.createDateDocuments = catchAsync(async (req, res, next) => {
       isFull: false,
       schedule: [
         {
-          something: 0,
           time: 9,
           isBooked: false,
           phone: '',
           email: ''
         },
         {
-          something: 1,
           time: 10,
           isBooked: false,
           phone: '',
           email: ''
         },
         {
-          something: 2,
           time: 11,
           isBooked: false,
           phone: '',
           email: ''
         },
         {
-          something: 3,
           time: 12,
           isBooked: false,
           phone: '',
           email: ''
         },
         {
-          something: 4,
           time: 13,
           isBooked: false,
           phone: '',
