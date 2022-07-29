@@ -20,20 +20,24 @@ const dateSchema = new mongoose.Schema({
       isBooked: Boolean,
       customerName: String,
       phone: String,
-      email: String
+      email: String,
+      lastHold: Date
     }
   ]
 });
 
 dateSchema.methods.checkAvailability = function(index) {
-  if (!this.schedule[index].isBooked) {
-    this.schedule[index].isBooked = true;
+  if (
+    !this.schedule[index].lastHold ||
+    Date.now() - this.schedule[index].lastHold.getTime() > 10 * 60 * 1000
+  ) {
+    this.schedule[index].lastHold = Date.now() - 1000;
     return true;
   } else return false;
 };
 
-dateSchema.methods.cancelBooking = function(index) {
-  this.schedule[index].isBooked = false;
+dateSchema.methods.releaseHold = function(index) {
+  this.schedule[index].lastHold = new Date('January 1, 2000, 12:00:00');
   return true;
 };
 
