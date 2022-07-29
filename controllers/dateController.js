@@ -26,14 +26,14 @@ exports.checkAvailability = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.cancelBooking = catchAsync(async (req, res, next) => {
+exports.releaseHold = catchAsync(async (req, res, next) => {
   const date = await DateS.findById(req.params.id);
 
   if (!date) {
     return next(new AppError('No date found with that ID', 404));
   }
 
-  date.cancelBooking(req.query.index);
+  date.releaseHold(req.query.index);
   await date.save();
 
   res.status(200).json({
@@ -75,7 +75,7 @@ exports.getAllDate = catchAsync(async (req, res, next) => {
 
 exports.createDateDocuments = catchAsync(async (req, res, next) => {
   const year = 2022;
-  const month = 6;
+  const month = 8;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   let i = 1;
@@ -90,31 +90,36 @@ exports.createDateDocuments = catchAsync(async (req, res, next) => {
           time: 9,
           isBooked: false,
           phone: '',
-          email: ''
+          email: '',
+          lastHold: new Date('January 1, 2000, 12:00:00')
         },
         {
           time: 10,
           isBooked: false,
           phone: '',
-          email: ''
+          email: '',
+          lastHold: new Date('January 1, 2000, 12:00:00')
         },
         {
           time: 11,
           isBooked: false,
           phone: '',
-          email: ''
+          email: '',
+          lastHold: new Date('January 1, 2000, 12:00:00')
         },
         {
           time: 12,
           isBooked: false,
           phone: '',
-          email: ''
+          email: '',
+          lastHold: new Date('January 1, 2000, 12:00:00')
         },
         {
           time: 13,
           isBooked: false,
           phone: '',
-          email: ''
+          email: '',
+          lastHold: new Date('January 1, 2000, 12:00:00')
         }
       ]
     };

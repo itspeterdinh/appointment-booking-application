@@ -6,6 +6,9 @@
   grid-template-columns: repeat(7);
   /* grid-template-rows: repeat(6); */
 }
+.weight-500 {
+  font-weight: 500;
+}
 .displayNone {
   visibility: hidden;
   opacity: 0;

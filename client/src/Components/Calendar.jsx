@@ -160,7 +160,7 @@ function Calendar({
                 disabled={selectedMonth === format(today, 'MMM-yyyy')}
               >
                 <span className="sr-only">Previous month</span>
-                <ChevronLeftIcon className="w-5 h-5" aria-hidden="true" />
+                <ChevronLeftIcon className="w-7 h-9" aria-hidden="true" />
               </button>
               <button
                 onClick={nextMonth}
@@ -174,7 +174,7 @@ function Calendar({
                 disabled={getIndex(today, selectedMonth) > 1}
               >
                 <span className="sr-only">Next month</span>
-                <ChevronRightIcon className="w-5 h-5" aria-hidden="true" />
+                <ChevronRightIcon className="w-7 h-9" aria-hidden="true" />
               </button>
             </div>
             <div className="grid grid-cols-7 mt-5 text-xs leading-6 text-center text-gray-1300">

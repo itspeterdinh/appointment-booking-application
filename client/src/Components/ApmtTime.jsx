@@ -103,7 +103,13 @@ function ApmtTime({
       {!isLoading && (
         <div className="appointment-time">
           <h4 className="appointment-time__heading font--bold m-bottom--8">
-            {'Available on ' + formatDate(date.toDateString())}
+            {'Available on ' +
+              date.toLocaleDateString(undefined, {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+              })}
           </h4>
           <p className="appointment-time__details m-bottom--32">
             <span className="appointment-time__current-section">
@@ -118,7 +124,12 @@ function ApmtTime({
               <div className="appointment-time-items w-background-light">
                 {dateData.schedule
                   ?.map((el, index) => ({ el, index }))
-                  .filter(({ el }) => !el.isBooked)
+                  .filter(
+                    ({ el }) =>
+                      !el.isBooked &&
+                      Date.now() - new Date(el.lastHold).getTime() >
+                        10 * 60 * 1000
+                  )
                   .map(({ el, index }) => {
                     return (
                       <button
@@ -141,13 +152,7 @@ function ApmtTime({
 }
 
 const getIndex = (today, cur) => {
-  // const temp = parse(cur, 'MMM-yyyy', new Date());
   return parse(cur, 'MMM-yyyy', new Date()).getMonth() - today.getMonth();
-};
-
-const formatDate = date => {
-  date = date.split(' ');
-  return date[0] + ', ' + date[1] + ' ' + date[2] + ', ' + date[3];
 };
 
 export default ApmtTime;
