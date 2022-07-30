@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.border-bottom {
+  border-bottom: 5px solid;
+}
 .grid-cols-7 {
   grid-template-columns: repeat(7);
   /* grid-template-rows: repeat(6); */

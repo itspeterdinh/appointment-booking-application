@@ -84,6 +84,9 @@ function ApmtTime({
             ctx.setSelectedTime({ dateData: dateData, index: index });
             navigate('/contact');
           } else {
+            ctx.setErrorText(
+              'We apologize, the time you selected is no longer available. Please select another time.'
+            );
             ctx.setError(true);
             setIsLoading(true);
             fetchSchedule();

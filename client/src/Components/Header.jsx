@@ -63,8 +63,7 @@ function Header(props) {
                 <div className="flash-message__body link--browser font--small flash-message--is-error .flash-message__body">
                   <span className="data-descriptive-icon obs-icon--error"></span>
                   <p className="flash-message--is-error .flash-message__body">
-                    We apologize, the time you selected is no longer available.
-                    Please select another time.
+                    {ctx.errorText}
                   </p>
                 </div>
               </div>

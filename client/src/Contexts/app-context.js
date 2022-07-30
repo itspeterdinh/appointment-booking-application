@@ -8,12 +8,15 @@ const AppContext = React.createContext({
   selectedTime: {},
   setSelectedTime: () => {},
   error: false,
-  setError: () => {}
+  setError: () => {},
+  errorText: '',
+  setErrorText: () => {}
 });
 
 export const AppContextProvider = props => {
   const [state, setState] = useState(false);
   const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState('');
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedTime, setSelectedTime] = useState({});
   const [element, setElement] = useState(new Set());
@@ -86,7 +89,9 @@ export const AppContextProvider = props => {
         selectedTime: selectedTime,
         setSelectedTime: setSelectedTime,
         error: error,
-        setError: setError
+        setError: setError,
+        errorText: errorText,
+        setErrorText: setErrorText
       }}
     >
       {props.children}
