@@ -26,8 +26,9 @@ const dateSchema = new mongoose.Schema({
   ]
 });
 
-dateSchema.methods.checkAvailability = function(index) {
+dateSchema.methods.checkAvailability = function(index, skip) {
   if (
+    skip ||
     !this.schedule[index].lastHold ||
     Date.now() - this.schedule[index].lastHold.getTime() > 10 * 60 * 1000
   ) {

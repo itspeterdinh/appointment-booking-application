@@ -40,9 +40,22 @@ export const AppContextProvider = props => {
   };
 
   useEffect(() => {
+    const reservedSession = JSON.parse(
+      localStorage.getItem('blinkk-esthetics-appointment')
+    );
+    reservedSession.time = selectedTime;
+    reservedSession.lastUpdatedTime = Date.now();
+    localStorage.setItem(
+      'blinkk-esthetics-appointment',
+      JSON.stringify(reservedSession)
+    );
+  }, [selectedTime]);
+
+  useEffect(() => {
     const newSession = {
       lastUpdatedTime: Date.now(),
       location: 'premises',
+      time: {},
       services: [],
       staffs: {}
     };
@@ -63,6 +76,7 @@ export const AppContextProvider = props => {
           JSON.stringify(newSession)
         );
       } else {
+        setSelectedTime(reservedSession.time);
         setSelectedServices(reservedSession.services);
         reservedSession.services.forEach(el => {
           addElement(el._id);

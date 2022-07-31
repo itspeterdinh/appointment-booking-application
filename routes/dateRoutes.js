@@ -10,7 +10,7 @@ router
 
 router.route('/check-availability/:id').patch(dateController.checkAvailability);
 
-router.route('/cancel-booking/:id').patch(dateController.releaseHold);
+router.route('/release-hold/:id').patch(dateController.releaseHold);
 
 router.route('/create-dates').post(dateController.createDateDocuments);
 

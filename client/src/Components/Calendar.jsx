@@ -139,6 +139,8 @@ function Calendar({
       ]
     );
   }
+
+  console.log(scheduleData);
   return (
     <div className="pt-5 m-bottom--32">
       <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
@@ -186,7 +188,8 @@ function Calendar({
               <div>F</div>
               <div>S</div>
             </div>
-            {!isLoading ? (
+            {!isLoading &&
+            getIndex(today, selectedMonth) < scheduleData.length ? (
               <div className="grid grid-cols-7 mt-2 mb-2 text-sm">
                 {days.map((day, dayIdx) => (
                   <div

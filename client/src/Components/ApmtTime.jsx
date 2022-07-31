@@ -60,10 +60,10 @@ function ApmtTime({
     }
   };
 
-  const cancelBooking = async data => {
+  const releaseHold = async data => {
     try {
       await axios
-        .patch(`/date/cancel-booking/${data.dateData._id}?index=${data.index}`)
+        .patch(`/date/release-hold/${data.dateData._id}?index=${data.index}`)
         .then(res => {
           console.log(res.data.data);
         });
@@ -74,12 +74,22 @@ function ApmtTime({
 
   const checkAvaibility = async index => {
     try {
+      let skip = false;
+
+      if (
+        ctx.selectedTime.dateData &&
+        dateData.schedule[index]._id ===
+          ctx.selectedTime.dateData.schedule[ctx.selectedTime.index]._id
+      )
+        skip = true;
       await axios
-        .patch(`/date/check-availability/${dateData._id}?index=${index}`)
+        .patch(`/date/check-availability/${dateData._id}?index=${index}`, {
+          skip: skip
+        })
         .then(res => {
           if (res.data.data.isAvailable) {
-            if (ctx.selectedTime.dateData) {
-              cancelBooking(ctx.selectedTime);
+            if (ctx.selectedTime.dateData && !skip) {
+              releaseHold(ctx.selectedTime);
             }
             ctx.setSelectedTime({ dateData: dateData, index: index });
             navigate('/contact');
@@ -96,6 +106,18 @@ function ApmtTime({
       console.log(err);
     }
   };
+
+  // const updateLocalStorage = selectedTime => {
+  //   const reservedSession = JSON.parse(
+  //     localStorage.getItem('blinkk-esthetics-appointment')
+  //   );
+  //   reservedSession.time = selectedTime;
+  //   reservedSession.lastUpdatedTime = Date.now();
+  //   localStorage.setItem(
+  //     'blinkk-esthetics-appointment',
+  //     JSON.stringify(reservedSession)
+  //   );
+  // };
 
   const handleOnClick = index => {
     checkAvaibility(index);
@@ -129,9 +151,14 @@ function ApmtTime({
                   ?.map((el, index) => ({ el, index }))
                   .filter(
                     ({ el }) =>
-                      !el.isBooked &&
-                      Date.now() - new Date(el.lastHold).getTime() >
-                        10 * 60 * 1000
+                      (ctx.selectedTime.dateData &&
+                        el._id ===
+                          ctx.selectedTime.dateData.schedule[
+                            ctx.selectedTime.index
+                          ]._id) ||
+                      (!el.isBooked &&
+                        Date.now() - new Date(el.lastHold).getTime() >
+                          10 * 60 * 1000)
                   )
                   .map(({ el, index }) => {
                     return (

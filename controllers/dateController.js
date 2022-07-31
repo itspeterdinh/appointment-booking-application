@@ -15,7 +15,7 @@ exports.checkAvailability = catchAsync(async (req, res, next) => {
     return next(new AppError('No date found with that ID', 404));
   }
 
-  const isAvailable = date.checkAvailability(req.query.index);
+  const isAvailable = date.checkAvailability(req.query.index, req.body.skip);
   await date.save();
 
   res.status(200).json({
