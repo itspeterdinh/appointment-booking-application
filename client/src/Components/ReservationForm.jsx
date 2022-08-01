@@ -46,6 +46,9 @@ function ReservationForm() {
     clearTimer(getDeadTime());
   }, []);
 
+  if (timer === '0:00') {
+  }
+
   const handleInput = e => {
     const formattedPhoneNumber = formatPhoneNumber(e.target.value);
 

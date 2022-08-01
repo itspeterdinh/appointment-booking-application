@@ -78,6 +78,7 @@ function ApmtTime({
 
       if (
         ctx.selectedTime.dateData &&
+        Date.now() - ctx.selectedTime.lastAdd + 1000 < 10 * 60 * 1000 &&
         dateData.schedule[index]._id ===
           ctx.selectedTime.dateData.schedule[ctx.selectedTime.index]._id
       )
@@ -91,7 +92,11 @@ function ApmtTime({
             if (ctx.selectedTime.dateData && !skip) {
               releaseHold(ctx.selectedTime);
             }
-            ctx.setSelectedTime({ dateData: dateData, index: index });
+            ctx.setSelectedTime({
+              dateData: dateData,
+              index: index,
+              lastAdd: Date.now()
+            });
             navigate('/contact');
           } else {
             ctx.setErrorText(
@@ -106,18 +111,6 @@ function ApmtTime({
       console.log(err);
     }
   };
-
-  // const updateLocalStorage = selectedTime => {
-  //   const reservedSession = JSON.parse(
-  //     localStorage.getItem('blinkk-esthetics-appointment')
-  //   );
-  //   reservedSession.time = selectedTime;
-  //   reservedSession.lastUpdatedTime = Date.now();
-  //   localStorage.setItem(
-  //     'blinkk-esthetics-appointment',
-  //     JSON.stringify(reservedSession)
-  //   );
-  // };
 
   const handleOnClick = index => {
     checkAvaibility(index);
@@ -152,6 +145,8 @@ function ApmtTime({
                   .filter(
                     ({ el }) =>
                       (ctx.selectedTime.dateData &&
+                        Date.now() - ctx.selectedTime.lastAdd + 1000 <
+                          10 * 60 * 1000 &&
                         el._id ===
                           ctx.selectedTime.dateData.schedule[
                             ctx.selectedTime.index
