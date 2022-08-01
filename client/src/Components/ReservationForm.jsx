@@ -1,23 +1,46 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useReducer } from 'react';
+
+const emailReducer = (state, action) => {
+  if (action.type === 'USER_INPUT') {
+    return { value: action.val, isValid: action.val.includes('@') };
+  }
+
+  if (action.type === 'INPUT_BLUR') {
+    return { value: state.value, isValid: state.value.includes('@') };
+  }
+
+  return { value: '', isValid: false };
+};
+
+const phoneReducer = (state, action) => {
+  if (action.type === 'USER_INPUT') {
+    return { value: action.val, isValid: action.val.trim().length === 14 };
+  }
+
+  if (action.type === 'INPUT_BLUR') {
+    return { value: state.value, isValid: action.val.trim().length === 14 };
+  }
+
+  return { value: '', isValid: false };
+};
 
 function ReservationForm() {
   const Ref = useRef(null);
   const [timer, setTimer] = useState('00:00');
   const [inputValue, setInputValue] = useState('');
+  const [formIsValid, setFormIsValid] = useState(false);
+  const [emailState, dispatchEmail] = useReducer(emailReducer, {
+    value: '',
+    isValid: null
+  });
+  const [phoneState, dispatchPhone] = useReducer(phoneReducer, {
+    value: '',
+    isValid: null
+  });
 
-  const getTimeRemaining = e => {
-    const total = Date.parse(e) - Date.parse(new Date());
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    const hours = Math.floor((total / 1000 / 60 / 60) % 24);
-    return {
-      total,
-      hours,
-      minutes,
-      seconds
-    };
-  };
+  const { isValid: emailIsValid } = emailState;
+  const { isValid: phoneIsValid } = phoneState;
 
   const startTimer = e => {
     let { total, minutes, seconds } = getTimeRemaining(e);
@@ -35,40 +58,14 @@ function ReservationForm() {
     Ref.current = id;
   };
 
-  const getDeadTime = () => {
-    let deadline = new Date();
-
-    deadline.setSeconds(deadline.getSeconds() + 600);
-    return deadline;
-  };
-
   useEffect(() => {
     clearTimer(getDeadTime());
   }, []);
-
-  if (timer === '0:00') {
-  }
 
   const handleInput = e => {
     const formattedPhoneNumber = formatPhoneNumber(e.target.value);
 
     setInputValue(formattedPhoneNumber);
-  };
-
-  const formatPhoneNumber = value => {
-    if (!value) return value;
-    const phoneNumber = value.replace(/[^\d]/g, '');
-    const phoneNumberLength = phoneNumber.length;
-
-    if (phoneNumberLength < 4) return phoneNumber;
-    if (phoneNumberLength < 7) {
-      return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
-    }
-
-    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
-      3,
-      6
-    )}-${phoneNumber.slice(6, 10)}`;
   };
 
   return (
@@ -160,5 +157,41 @@ function ReservationForm() {
     </form>
   );
 }
+
+const formatPhoneNumber = value => {
+  if (!value) return value;
+  const phoneNumber = value.replace(/[^\d]/g, '');
+  const phoneNumberLength = phoneNumber.length;
+
+  if (phoneNumberLength < 4) return phoneNumber;
+  if (phoneNumberLength < 7) {
+    return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
+  }
+
+  return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(
+    3,
+    6
+  )}-${phoneNumber.slice(6, 10)}`;
+};
+
+const getTimeRemaining = e => {
+  const total = Date.parse(e) - Date.parse(new Date());
+  const seconds = Math.floor((total / 1000) % 60);
+  const minutes = Math.floor((total / 1000 / 60) % 60);
+  const hours = Math.floor((total / 1000 / 60 / 60) % 24);
+  return {
+    total,
+    hours,
+    minutes,
+    seconds
+  };
+};
+
+const getDeadTime = () => {
+  let deadline = new Date();
+
+  deadline.setSeconds(deadline.getSeconds() + 600);
+  return deadline;
+};
 
 export default ReservationForm;
