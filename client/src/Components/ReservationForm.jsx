@@ -52,10 +52,14 @@ function ReservationForm() {
   const clearTimer = e => {
     setTimer('10:00');
     if (Ref.current) clearInterval(Ref.current);
-    const id = setInterval(() => {
+    const timer = setInterval(() => {
       startTimer(e);
     }, 1000);
-    Ref.current = id;
+    Ref.current = timer;
+
+    return () => {
+      clearInterval(timer);
+    };
   };
 
   useEffect(() => {
