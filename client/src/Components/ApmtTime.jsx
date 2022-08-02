@@ -97,6 +97,11 @@ function ApmtTime({
               index: index,
               lastAdd: Date.now()
             });
+            updateTime({
+              dateData: dateData,
+              index: index,
+              lastAdd: Date.now()
+            });
             navigate('/contact');
           } else {
             ctx.setErrorText(
@@ -110,6 +115,18 @@ function ApmtTime({
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const updateTime = selectedTime => {
+    const reservedSession = JSON.parse(
+      localStorage.getItem('blinkk-esthetics-appointment')
+    );
+    reservedSession.time = selectedTime;
+    reservedSession.lastUpdatedTime = Date.now();
+    localStorage.setItem(
+      'blinkk-esthetics-appointment',
+      JSON.stringify(reservedSession)
+    );
   };
 
   const handleOnClick = index => {

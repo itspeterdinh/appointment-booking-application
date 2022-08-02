@@ -19,7 +19,7 @@ const phoneReducer = (state, action) => {
   }
 
   if (action.type === 'INPUT_BLUR') {
-    return { value: state.value, isValid: action.val.trim().length === 14 };
+    return { value: state.value, isValid: state.value.trim().length === 14 };
   }
 
   return { value: '', isValid: false };
@@ -28,12 +28,12 @@ const phoneReducer = (state, action) => {
 function ReservationForm() {
   const Ref = useRef(null);
   const [timer, setTimer] = useState('00:00');
-  const [inputValue, setInputValue] = useState('');
   const [formIsValid, setFormIsValid] = useState(false);
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
     value: '',
     isValid: null
   });
+
   const [phoneState, dispatchPhone] = useReducer(phoneReducer, {
     value: '',
     isValid: null
@@ -66,10 +66,38 @@ function ReservationForm() {
     clearTimer(getDeadTime());
   }, []);
 
-  const handleInput = e => {
-    const formattedPhoneNumber = formatPhoneNumber(e.target.value);
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      setFormIsValid(emailIsValid && phoneIsValid);
+    }, 500);
 
-    setInputValue(formattedPhoneNumber);
+    return () => {
+      clearTimeout(identifier);
+    };
+  }, [emailIsValid, phoneIsValid]);
+
+  const emailChangeHandler = event => {
+    dispatchEmail({ type: 'USER_INPUT', val: event.target.value });
+
+    setFormIsValid(phoneState.isValid && event.target.value.includes('@'));
+  };
+
+  const phoneChangeHandler = event => {
+    const formattedPhoneNumber = formatPhoneNumber(event.target.value);
+
+    dispatchPhone({ type: 'USER_INPUT', val: formattedPhoneNumber });
+
+    setFormIsValid(
+      emailState.isValid && formattedPhoneNumber.trim().length === 14
+    );
+  };
+
+  const validatePhoneHandler = () => {
+    dispatchPhone({ type: 'INPUT_BLUR' });
+  };
+
+  const validateEmailHandler = () => {
+    dispatchEmail({ type: 'INPUT_BLUR' });
   };
 
   return (
@@ -96,8 +124,9 @@ function ReservationForm() {
                 type="tel"
                 className="ember-view ember-text-field input-group__input input l-fill input-phone"
                 autoCapitalize="off"
-                onChange={e => handleInput(e)}
-                value={inputValue}
+                value={phoneState.value}
+                onChange={phoneChangeHandler}
+                onBlur={validatePhoneHandler}
               ></input>
             </div>
           </div>
@@ -108,6 +137,9 @@ function ReservationForm() {
               type="email"
               className="ember-view ember-text-field input-group__input input l-fill client-email"
               autoCapitalize="off"
+              value={emailState.value}
+              onChange={emailChangeHandler}
+              onBlur={validateEmailHandler}
             ></input>
           </div>
         </div>
