@@ -90,6 +90,7 @@ function ApmtTime({
             if (ctx.selectedTime.dateData && !skip) {
               releaseHold(ctx.selectedTime);
             }
+            ctx.setRedirect(false);
             ctx.setSelectedTime({
               dateData: dateData,
               index: index,
@@ -102,6 +103,9 @@ function ApmtTime({
             });
             navigate('/contact');
           } else {
+            if (ctx.selectedTime.dateData) {
+              ctx.setSelectedTime({});
+            }
             ctx.setErrorText(
               'We apologize, the time you selected is no longer available. Please select another time.'
             );

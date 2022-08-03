@@ -10,11 +10,14 @@ const AppContext = React.createContext({
   error: false,
   setError: () => {},
   errorText: '',
-  setErrorText: () => {}
+  setErrorText: () => {},
+  redirect: true,
+  setRedirect: () => {}
 });
 
 export const AppContextProvider = props => {
   const [state, setState] = useState(false);
+  const [redirect, setRedirect] = useState(true);
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [selectedServices, setSelectedServices] = useState([]);
@@ -38,18 +41,6 @@ export const AppContextProvider = props => {
   const removeElement = element => {
     setElement(prev => new Set([...prev].filter(x => x !== element)));
   };
-
-  // useEffect(() => {
-  //   const reservedSession = JSON.parse(
-  //     localStorage.getItem('blinkk-esthetics-appointment')
-  //   );
-  //   reservedSession.time = selectedTime;
-  //   reservedSession.lastUpdatedTime = Date.now();
-  //   localStorage.setItem(
-  //     'blinkk-esthetics-appointment',
-  //     JSON.stringify(reservedSession)
-  //   );
-  // }, [selectedTime]);
 
   useEffect(() => {
     const newSession = {
@@ -105,7 +96,9 @@ export const AppContextProvider = props => {
         error: error,
         setError: setError,
         errorText: errorText,
-        setErrorText: setErrorText
+        setErrorText: setErrorText,
+        redirect,
+        setRedirect
       }}
     >
       {props.children}
