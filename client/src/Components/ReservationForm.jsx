@@ -182,6 +182,7 @@ function ReservationForm() {
       </div>
       <button
         type="button"
+        disabled={!formIsValid}
         className="w-button w-button--primary w-button--large w-button--rounded l-fill widget-book-appointment-button ember-view button button--loading"
       >
         Book appointment

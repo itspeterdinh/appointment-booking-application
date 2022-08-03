@@ -62,11 +62,9 @@ function ApmtTime({
 
   const releaseHold = async data => {
     try {
-      await axios
-        .patch(`/date/release-hold/${data.dateData._id}?index=${data.index}`)
-        .then(res => {
-          console.log(res.data.data);
-        });
+      await axios.patch(
+        `/date/release-hold/${data.dateData._id}?index=${data.index}`
+      );
     } catch (err) {
       console.log(err);
     }
