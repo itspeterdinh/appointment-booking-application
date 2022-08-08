@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
   phone: {
-    type: Number,
-    require: true
+    type: String,
+    require: true,
+    trim: true
   },
   email: {
     type: String,
@@ -16,7 +17,8 @@ const userSchema = new mongoose.Schema({
   lastName: {
     type: String,
     trim: true
-  }
+  },
+  createdAt: Date
 });
 
 const User = mongoose.model('User', userSchema);

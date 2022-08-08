@@ -25,6 +25,30 @@ const phoneReducer = (state, action) => {
   return { value: '', isValid: false };
 };
 
+const firstNameReducer = (state, action) => {
+  if (action.type === 'USER_INPUT') {
+    return { value: action.val, isValid: action.val.trim().length > 0 };
+  }
+
+  if (action.type === 'INPUT_BLUR') {
+    return { value: state.value, isValid: state.value.trim().length > 0 };
+  }
+
+  return { value: '', isValid: false };
+};
+
+const lastNameReducer = (state, action) => {
+  if (action.type === 'USER_INPUT') {
+    return { value: action.val, isValid: action.val.trim().length > 0 };
+  }
+
+  if (action.type === 'INPUT_BLUR') {
+    return { value: state.value, isValid: state.value.trim().length > 0 };
+  }
+
+  return { value: '', isValid: false };
+};
+
 function ReservationForm() {
   const Ref = useRef(null);
   const [timer, setTimer] = useState('00:00');
@@ -39,8 +63,20 @@ function ReservationForm() {
     isValid: null
   });
 
+  const [firstNameState, dispatchFirstName] = useReducer(firstNameReducer, {
+    value: '',
+    isValid: null
+  });
+
+  const [lastNameState, dispatchLastName] = useReducer(lastNameReducer, {
+    value: '',
+    isValid: null
+  });
+
   const { isValid: emailIsValid } = emailState;
   const { isValid: phoneIsValid } = phoneState;
+  const { isValid: lastNameIsValid } = lastNameState;
+  const { isValid: firstNameIsValid } = firstNameState;
 
   const startTimer = e => {
     let { total, minutes, seconds } = getTimeRemaining(e);
@@ -68,18 +104,25 @@ function ReservationForm() {
 
   useEffect(() => {
     const identifier = setTimeout(() => {
-      setFormIsValid(emailIsValid && phoneIsValid);
+      setFormIsValid(
+        emailIsValid && phoneIsValid && lastNameIsValid && firstNameIsValid
+      );
     }, 500);
 
     return () => {
       clearTimeout(identifier);
     };
-  }, [emailIsValid, phoneIsValid]);
+  }, [emailIsValid, phoneIsValid, lastNameIsValid, firstNameIsValid]);
 
   const emailChangeHandler = event => {
     dispatchEmail({ type: 'USER_INPUT', val: event.target.value });
 
-    setFormIsValid(phoneState.isValid && event.target.value.includes('@'));
+    setFormIsValid(
+      phoneState.isValid &&
+        event.target.value.includes('@') &&
+        firstNameState.isValid &&
+        lastNameState.isValid
+    );
   };
 
   const phoneChangeHandler = event => {
@@ -88,7 +131,32 @@ function ReservationForm() {
     dispatchPhone({ type: 'USER_INPUT', val: formattedPhoneNumber });
 
     setFormIsValid(
-      emailState.isValid && formattedPhoneNumber.trim().length === 14
+      emailState.isValid &&
+        formattedPhoneNumber.trim().length === 14 &&
+        firstNameState.isValid &&
+        lastNameState.isValid
+    );
+  };
+
+  const firstNameChangeHandler = event => {
+    dispatchFirstName({ type: 'USER_INPUT', val: event.target.value });
+
+    setFormIsValid(
+      emailState.isValid &&
+        phoneState.isValid &&
+        event.target.value.trim().length > 0 &&
+        lastNameState.isValid
+    );
+  };
+
+  const lastNameChangeHandler = event => {
+    dispatchLastName({ type: 'USER_INPUT', val: event.target.value });
+
+    setFormIsValid(
+      emailState.isValid &&
+        phoneState.isValid &&
+        event.target.value.trim().length > 0 &&
+        firstNameState.isValid
     );
   };
 
@@ -100,8 +168,31 @@ function ReservationForm() {
     dispatchEmail({ type: 'INPUT_BLUR' });
   };
 
+  const validateFirstNameHandler = () => {
+    dispatchFirstName({ type: 'INPUT_BLUR' });
+  };
+
+  const validateLastNameHandler = () => {
+    dispatchLastName({ type: 'INPUT_BLUR' });
+  };
+
+  const submitHandler = event => {
+    event.preventDefault();
+    if (formIsValid) {
+      console.log({
+        email: emailState.value,
+        phone: phoneState.value,
+        firstName: firstNameState.value,
+        lastName: lastNameState.value
+      });
+    }
+  };
+
   return (
-    <form className="appointment-content w-background-light input-group col col-sm-10 offset-sm-1 col-md-8 widget-reservation-contact">
+    <form
+      className="appointment-content w-background-light input-group col col-sm-10 offset-sm-1 col-md-8 widget-reservation-contact"
+      onSubmit={submitHandler}
+    >
       <div className="widget-contact__header-section">
         <div className="widget-contact__title m-bottom--8">
           <h3 className="font--bold m-bottom--16">
@@ -150,6 +241,9 @@ function ReservationForm() {
               autoComplete="given-name"
               type="text"
               className="ember-view ember-text-field input l-fill input-group__input client-first-name l-fill"
+              value={firstNameState.value}
+              onChange={firstNameChangeHandler}
+              onBlur={validateFirstNameHandler}
             ></input>
           </div>
           <div className="col col-6-sm contact-field--small-padding-left">
@@ -158,6 +252,9 @@ function ReservationForm() {
               autoComplete="family-name"
               type="text"
               className="ember-view ember-text-field input l-fill input-group__input client-last-name l-fill"
+              value={lastNameState.value}
+              onChange={lastNameChangeHandler}
+              onBlur={validateLastNameHandler}
             ></input>
           </div>
         </div>
@@ -181,7 +278,7 @@ function ReservationForm() {
         </p>
       </div>
       <button
-        type="button"
+        type="submit"
         disabled={!formIsValid}
         className="w-button w-button--primary w-button--large w-button--rounded l-fill widget-book-appointment-button ember-view button button--loading"
       >
