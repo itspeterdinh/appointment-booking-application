@@ -1,5 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useRef, useEffect, useReducer } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useReducer,
+  useContext
+} from 'react';
+import AppContext from '../Contexts/app-context';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const emailReducer = (state, action) => {
   if (action.type === 'USER_INPUT') {
@@ -50,8 +59,10 @@ const lastNameReducer = (state, action) => {
 };
 
 function ReservationForm() {
+  const ctx = useContext(AppContext);
   const Ref = useRef(null);
   const [timer, setTimer] = useState('00:00');
+  const navigate = useNavigate();
   const [formIsValid, setFormIsValid] = useState(false);
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
     value: '',
@@ -176,15 +187,47 @@ function ReservationForm() {
     dispatchLastName({ type: 'INPUT_BLUR' });
   };
 
+  const bookAppointment = () => {
+    console.log('Booked');
+  };
+
+  const checkAvaibility = async () => {
+    try {
+      let skip = false;
+      if (
+        ctx.selectedTime.dateData &&
+        Date.now() - ctx.selectedTime.lastAdd + 1000 < 10 * 60 * 1000
+      ) {
+        bookAppointment();
+      } else {
+        await axios
+          .patch(
+            `/date/check-availability/${ctx.selectedTime.dateData._id}?index=${ctx.selectedTime.index}`,
+            {
+              skip: skip
+            }
+          )
+          .then(res => {
+            if (res.data.data.isAvailable) {
+              bookAppointment();
+            } else {
+              navigate('/date');
+              ctx.setErrorText(
+                'We apologize, the time you selected is no longer available. Please select another time.'
+              );
+              ctx.setError(true);
+            }
+          });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const submitHandler = event => {
     event.preventDefault();
     if (formIsValid) {
-      console.log({
-        email: emailState.value,
-        phone: phoneState.value,
-        firstName: firstNameState.value,
-        lastName: lastNameState.value
-      });
+      checkAvaibility();
     }
   };
 

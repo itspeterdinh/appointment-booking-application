@@ -18,7 +18,11 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
-  notes: String
+  notes: String,
+  createdAt: {
+    type: Date,
+    default: Date.now()
+  }
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);

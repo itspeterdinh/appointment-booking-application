@@ -57,7 +57,7 @@ exports.getAllDate = catchAsync(async (req, res, next) => {
 
   const today = new Date();
 
-  const firstAvailability = doc.find(
+  const firstAvailability = await doc.find(
     element =>
       new Date(element.year, element.month, element.date) >= today &&
       !element.isFull
