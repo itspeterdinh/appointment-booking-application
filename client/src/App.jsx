@@ -3,14 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import './Styles/globals.css';
-import Header from './Components/Header';
 import Section from './Components/Section';
 import Service from './Components/Service';
 import DateCompo from './Components/DateCompo';
 import Contact from './Components/Contact';
-import ToolBar from './Components/ToolBar';
 import Reservation from './Components/Reservations';
 import NotFound from './Components/NotFound';
+import PageLayout from './Components/PageLayout';
 
 function App() {
   const [business, setBusiness] = useState(null);
@@ -48,22 +47,26 @@ function App() {
       {!isLoading && (
         <div className="App">
           <div className="page-layout page-layout--flex">
-            <Header name={business.name} avatar={business.avatar} />
             <Routes>
               <Route
-                path="/"
-                element={<Section business={business} services={services} />}
-              />
-              <Route
-                path="/service"
-                element={<Service services={services} />}
-              />
-              <Route path="/date" element={<DateCompo />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/reservation/:id" element={<Reservation />} />
+                element={
+                  <PageLayout name={business.name} avatar={business.avatar} />
+                }
+              >
+                <Route
+                  path="/"
+                  element={<Section business={business} services={services} />}
+                />
+                <Route
+                  path="/service"
+                  element={<Service services={services} />}
+                />
+                <Route path="/date" element={<DateCompo />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/reservation/:id" element={<Reservation />} />
+              </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
-            <ToolBar />
           </div>
         </div>
       )}
