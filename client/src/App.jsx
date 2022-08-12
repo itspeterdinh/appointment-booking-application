@@ -59,7 +59,7 @@ function App() {
               />
               <Route path="/date" element={<DateCompo />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/reservation" element={<Reservation />} />
+              <Route path="/reservation/:id" element={<Reservation />} />
             </Routes>
             <ToolBar />
           </div>

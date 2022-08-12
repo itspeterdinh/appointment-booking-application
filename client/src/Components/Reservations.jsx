@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
+import { useParams } from 'react-router-dom';
 
 function Reservation() {
+  const { id } = useParams();
+  console.log(id);
   return (
     <div className="widget">
       <div className="widget-section">
