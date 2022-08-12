@@ -10,6 +10,7 @@ import DateCompo from './Components/DateCompo';
 import Contact from './Components/Contact';
 import ToolBar from './Components/ToolBar';
 import Reservation from './Components/Reservations';
+import NotFound from './Components/NotFound';
 
 function App() {
   const [business, setBusiness] = useState(null);
@@ -60,6 +61,7 @@ function App() {
               <Route path="/date" element={<DateCompo />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/reservation/:id" element={<Reservation />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
             <ToolBar />
           </div>
