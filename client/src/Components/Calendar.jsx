@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
+import AppContext from '../Contexts/app-context';
 import axios from 'axios';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import {
@@ -36,7 +37,7 @@ function Calendar({
   firstDayCurrentMonth
 }) {
   const today = startOfToday();
-
+  const ctx = useContext(AppContext);
   const days = eachDayOfInterval({
     start: firstDayCurrentMonth,
     end: endOfMonth(firstDayCurrentMonth)
@@ -140,6 +141,7 @@ function Calendar({
     );
   }
 
+  console.log(scheduleData[getIndex(today, selectedMonth)]);
   return (
     <div className="pt-5 m-bottom--32">
       <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
@@ -204,8 +206,16 @@ function Calendar({
                       disabled={
                         isToday(day) ||
                         isBefore(day, today) ||
-                        scheduleData[getIndex(today, selectedMonth)]
-                          .dateByMonth[day.getDate() - 1].isFull
+                        scheduleData[
+                          getIndex(today, selectedMonth)
+                        ].dateByMonth[day.getDate() - 1].schedule.filter(
+                          el =>
+                            (ctx.selectedTime.slot &&
+                              el._id === ctx.selectedTime.slot._id) ||
+                            (!el.isBooked &&
+                              Date.now() - new Date(el.lastHold).getTime() >
+                                10 * 60 * 1000)
+                        ).length === 0
                       }
                       className={classNames(
                         isEqual(day, selectedDay) && 'text-white',
@@ -214,8 +224,18 @@ function Calendar({
                           'text-red-500',
                         !isEqual(day, selectedDay) &&
                           isAfter(day, today) &&
-                          !scheduleData[getIndex(today, selectedMonth)]
-                            .dateByMonth[day.getDate() - 1].isFull &&
+                          !(
+                            scheduleData[
+                              getIndex(today, selectedMonth)
+                            ].dateByMonth[day.getDate() - 1].schedule.filter(
+                              el =>
+                                (ctx.selectedTime.slot &&
+                                  el._id === ctx.selectedTime.slot._id) ||
+                                (!el.isBooked &&
+                                  Date.now() - new Date(el.lastHold).getTime() >
+                                    10 * 60 * 1000)
+                            ).length === 0
+                          ) &&
                           'text-blue-700 blue-border',
                         !isEqual(day, selectedDay) &&
                           !isToday(day) &&
@@ -230,14 +250,32 @@ function Calendar({
                         !isEqual(day, selectedDay) &&
                           !isToday(day) &&
                           !isBefore(day, today) &&
-                          !scheduleData[getIndex(today, selectedMonth)]
-                            .dateByMonth[day.getDate() - 1].isFull &&
+                          !(
+                            scheduleData[
+                              getIndex(today, selectedMonth)
+                            ].dateByMonth[day.getDate() - 1].schedule.filter(
+                              el =>
+                                (ctx.selectedTime.slot &&
+                                  el._id === ctx.selectedTime.slot._id) ||
+                                (!el.isBooked &&
+                                  Date.now() - new Date(el.lastHold).getTime() >
+                                    10 * 60 * 1000)
+                            ).length === 0
+                          ) &&
                           'hover:bg-gray-200',
                         (isEqual(day, selectedDay) || isToday(day)) &&
                           'font-semibold',
                         (isBefore(day, today) ||
-                          scheduleData[getIndex(today, selectedMonth)]
-                            .dateByMonth[day.getDate() - 1].isFull) &&
+                          scheduleData[
+                            getIndex(today, selectedMonth)
+                          ].dateByMonth[day.getDate() - 1].schedule.filter(
+                            el =>
+                              (ctx.selectedTime.slot &&
+                                el._id === ctx.selectedTime.slot._id) ||
+                              (!el.isBooked &&
+                                Date.now() - new Date(el.lastHold).getTime() >
+                                  10 * 60 * 1000)
+                          ).length === 0) &&
                           'text-gray-400',
                         'mx-auto flex h-10 w-10 items-center justify-center rounded-full none-border font--bold'
                       )}
@@ -287,5 +325,13 @@ const colStartClasses = [
 const getIndex = (today, cur) => {
   return parse(cur, 'MMM-yyyy', new Date()).getMonth() - today.getMonth();
 };
+
+// const isFull = (schedule, id) => {
+//   console.log(schedule);
+//   if (schedule.length === 1 && schedule[0]._id !== id) {
+//     return true;
+//   }
+//   return false;
+// };
 
 export default Calendar;

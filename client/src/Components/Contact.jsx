@@ -9,10 +9,10 @@ function Contact() {
   const ctx = useContext(AppContext);
 
   useEffect(() => {
-    if (!ctx.selectedTime.dateData || ctx.redirect) {
+    if (!ctx.selectedTime.slot || ctx.redirect) {
       navigate('/date');
     }
-  }, [ctx.selectedTime.dateData, navigate, ctx.redirect]);
+  }, [ctx.selectedTime.slot, navigate, ctx.redirect]);
 
   return (
     <section className="container landing">

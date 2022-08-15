@@ -57,7 +57,7 @@ function ApmtSteps(props) {
         }
       >
         <div className="font--bold m-bottom--16 link--browser">
-          {ctx.selectedTime.dateData ? (
+          {ctx.selectedTime.slot ? (
             <>
               <h5 className="sidebar-section-title sidebar-section-title--complete">
                 Date and time
@@ -77,7 +77,7 @@ function ApmtSteps(props) {
           )}
         </div>
         <div className="sidebar-section-details">
-          {ctx.selectedTime.dateData && (
+          {ctx.selectedTime.slot && (
             <div className="card card--secondary">
               <div className="ember-view">{timeCard(ctx.selectedTime)}</div>
             </div>
@@ -99,33 +99,12 @@ function ApmtSteps(props) {
 }
 
 const timeCard = data => {
-  const date = new Date(
-    data.dateData.year,
-    data.dateData.month,
-    data.dateData.date
-  );
   return (
     <>
-      {date.toLocaleDateString(undefined, {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      })}
+      {data.date}
       <br />
-      {convertToTime(data.dateData.schedule[data.index].time)}
+      {data.time}
     </>
-  );
-};
-
-const convertToTime = time => {
-  let tail = 'PM';
-  if (time < 12) {
-    tail = 'AM';
-  }
-
-  return (
-    time.toString() + ':00 ' + tail + ' - ' + time.toString() + ':50 ' + tail
   );
 };
 

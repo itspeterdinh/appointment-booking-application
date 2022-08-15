@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const DateS = require('../models/dateModel');
+const Slot = require('../models/slotModel');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
@@ -9,32 +10,33 @@ exports.createDateSchedule = factory.createOne(DateS);
 // exports.getAllDate = factory.getAll(DateS);
 
 exports.checkAvailability = catchAsync(async (req, res, next) => {
-  const date = await DateS.findById(req.params.id);
+  const slot = await Slot.findById(req.params.id);
 
-  if (!date) {
+  if (!slot) {
     return next(new AppError('No date found with that ID', 404));
   }
 
-  const isAvailable = date.checkAvailability(req.query.index, req.body.skip);
-  await date.save();
+  const isAvailable = slot.checkAvailability(req.body.skip);
+  await slot.save();
 
   res.status(200).json({
     status: 'success',
     data: {
+      slot: slot,
       isAvailable: isAvailable
     }
   });
 });
 
 exports.releaseHold = catchAsync(async (req, res, next) => {
-  const date = await DateS.findById(req.params.id);
+  const slot = await Slot.findById(req.params.id);
 
-  if (!date) {
+  if (!slot) {
     return next(new AppError('No date found with that ID', 404));
   }
 
-  date.releaseHold(req.query.index);
-  await date.save();
+  slot.releaseHold();
+  await slot.save();
 
   res.status(200).json({
     status: 'success',
@@ -80,50 +82,21 @@ exports.createDateDocuments = catchAsync(async (req, res, next) => {
 
   let i = 1;
   while (i <= daysInMonth) {
-    const date = {
+    let schedule = [];
+    for (let j = 9; j <= 15; j++) {
+      const newSlot = await Slot.create({
+        time: j,
+        isBooked: false,
+        lastHold: new Date('January 1, 2000, 12:00:00')
+      });
+      schedule = [...schedule, newSlot];
+    }
+    await DateS.create({
       year: year,
       month: month,
       date: i,
-      isFull: false,
-      schedule: [
-        {
-          time: 9,
-          isBooked: false,
-          phone: '',
-          email: '',
-          lastHold: new Date('January 1, 2000, 12:00:00')
-        },
-        {
-          time: 10,
-          isBooked: false,
-          phone: '',
-          email: '',
-          lastHold: new Date('January 1, 2000, 12:00:00')
-        },
-        {
-          time: 11,
-          isBooked: false,
-          phone: '',
-          email: '',
-          lastHold: new Date('January 1, 2000, 12:00:00')
-        },
-        {
-          time: 12,
-          isBooked: false,
-          phone: '',
-          email: '',
-          lastHold: new Date('January 1, 2000, 12:00:00')
-        },
-        {
-          time: 13,
-          isBooked: false,
-          phone: '',
-          email: '',
-          lastHold: new Date('January 1, 2000, 12:00:00')
-        }
-      ]
-    };
-    await DateS.create(date);
+      schedule: schedule
+    });
     i += 1;
   }
 

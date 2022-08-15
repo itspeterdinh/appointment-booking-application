@@ -187,26 +187,39 @@ function ReservationForm() {
     dispatchLastName({ type: 'INPUT_BLUR' });
   };
 
-  const bookAppointment = () => {
-    console.log('Booked');
+  const bookAppointment = async () => {
+    try {
+      await axios
+        .post('/reservation/book-appointment', {
+          date: ctx.selectedTime.date,
+          time: ctx.selectedTime.time,
+          phone: phoneState.value,
+          email: emailState.value,
+          firstName: firstNameState.value,
+          lastName: lastNameState.value,
+          slot: ctx.selectedTime.slot._id
+        })
+        .then(res => {
+          navigate(`/reservation/${res.data.data.id}`);
+        });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const checkAvaibility = async () => {
     try {
       let skip = false;
       if (
-        ctx.selectedTime.dateData &&
+        ctx.selectedTime.slot &&
         Date.now() - ctx.selectedTime.lastAdd + 1000 < 10 * 60 * 1000
       ) {
         bookAppointment();
       } else {
         await axios
-          .patch(
-            `/date/check-availability/${ctx.selectedTime.dateData._id}?index=${ctx.selectedTime.index}`,
-            {
-              skip: skip
-            }
-          )
+          .patch(`/date/check-availability/${ctx.selectedTime.slot._id}`, {
+            skip: skip
+          })
           .then(res => {
             if (res.data.data.isAvailable) {
               bookAppointment();

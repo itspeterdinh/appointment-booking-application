@@ -13,34 +13,22 @@ const dateSchema = new mongoose.Schema({
     type: Number,
     require: true
   },
-  isFull: Boolean,
   schedule: [
     {
-      time: Number,
-      isBooked: Boolean,
-      customerName: String,
-      phone: String,
-      email: String,
-      lastHold: Date
+      type: mongoose.Schema.ObjectId,
+      ref: 'Slot'
     }
   ]
 });
 
-dateSchema.methods.checkAvailability = function(index, skip) {
-  if (
-    skip ||
-    !this.schedule[index].lastHold ||
-    Date.now() - this.schedule[index].lastHold.getTime() > 10 * 60 * 1000
-  ) {
-    this.schedule[index].lastHold = Date.now() - 1000;
-    return true;
-  } else return false;
-};
+dateSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'schedule',
+    select: 'time lastHold isBooked booking'
+  });
 
-dateSchema.methods.releaseHold = function(index) {
-  this.schedule[index].lastHold = new Date('January 1, 2000, 12:00:00');
-  return true;
-};
+  next();
+});
 
 const DateS = mongoose.model('DateS', dateSchema);
 

@@ -60,45 +60,53 @@ function ApmtTime({
     }
   };
 
-  const releaseHold = async data => {
+  const releaseHold = async _id => {
     try {
-      await axios.patch(
-        `/date/release-hold/${data.dateData._id}?index=${data.index}`
-      );
+      await axios.patch(`/date/release-hold/${_id}`);
     } catch (err) {
       console.log(err);
     }
   };
 
-  const checkAvaibility = async index => {
+  const checkAvaibility = async _id => {
     try {
       let skip = false;
-
       if (
-        ctx.selectedTime.dateData &&
+        ctx.selectedTime.slot &&
         Date.now() - ctx.selectedTime.lastAdd + 1000 < 10 * 60 * 1000 &&
-        dateData.schedule[index]._id ===
-          ctx.selectedTime.dateData.schedule[ctx.selectedTime.index]._id
+        _id === ctx.selectedTime.slot._id
       )
         skip = true;
       await axios
-        .patch(`/date/check-availability/${dateData._id}?index=${index}`, {
+        .patch(`/date/check-availability/${_id}`, {
           skip: skip
         })
         .then(res => {
           if (res.data.data.isAvailable) {
-            if (ctx.selectedTime.dateData && !skip) {
-              releaseHold(ctx.selectedTime);
+            if (ctx.selectedTime.slot && !skip) {
+              releaseHold(ctx.selectedTime.slot._id);
             }
             ctx.setRedirect(false);
             ctx.setSelectedTime({
-              dateData: dateData,
-              index: index,
+              date: date.toLocaleDateString(undefined, {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              }),
+              time: convertToTime(res.data.data.slot.time),
+              slot: res.data.data.slot,
               lastAdd: Date.now()
             });
             updateTime({
-              dateData: dateData,
-              index: index,
+              date: date.toLocaleDateString(undefined, {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              }),
+              time: convertToTime(res.data.data.slot.time),
+              slot: res.data.data.slot,
               lastAdd: Date.now()
             });
             navigate('/contact');
@@ -163,16 +171,13 @@ function ApmtTime({
                   ?.map((el, index) => ({ el, index }))
                   .filter(
                     ({ el }) =>
-                      (ctx.selectedTime.dateData &&
-                        Date.now() - ctx.selectedTime.lastAdd + 1000 <
-                          10 * 60 * 1000 &&
-                        el._id ===
-                          ctx.selectedTime.dateData.schedule[
-                            ctx.selectedTime.index
-                          ]._id) ||
-                      (!el.isBooked &&
-                        Date.now() - new Date(el.lastHold).getTime() >
-                          10 * 60 * 1000)
+                      !el.isBooked &&
+                      (Date.now() - new Date(el.lastHold).getTime() >
+                        10 * 60 * 1000 ||
+                        (ctx.selectedTime.slot &&
+                          Date.now() - ctx.selectedTime.lastAdd + 1000 <
+                            10 * 60 * 1000 &&
+                          el._id === ctx.selectedTime.slot._id))
                   )
                   .map(({ el, index }) => {
                     return (
@@ -180,7 +185,7 @@ function ApmtTime({
                         key={el._id}
                         type="button"
                         className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
-                        onClick={() => handleOnClick(index)}
+                        onClick={() => handleOnClick(el._id)}
                       >
                         {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'}
                       </button>
@@ -197,6 +202,17 @@ function ApmtTime({
 
 const getIndex = (today, cur) => {
   return parse(cur, 'MMM-yyyy', new Date()).getMonth() - today.getMonth();
+};
+
+const convertToTime = time => {
+  let tail = 'PM';
+  if (time < 12) {
+    tail = 'AM';
+  }
+
+  return (
+    time.toString() + ':00 ' + tail + ' - ' + time.toString() + ':50 ' + tail
+  );
 };
 
 export default ApmtTime;
