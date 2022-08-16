@@ -18,8 +18,11 @@ function ApmtTime({
   const ctx = useContext(AppContext);
   const today = startOfToday();
   const date = new Date();
+  const newSchedule = splitSchedule(dateData.schedule, ctx);
   const navigate = useNavigate();
   date.setFullYear(dateData.year, dateData.month, dateData.date);
+
+  // console.log(newSchedule);
 
   const fetchSchedule = async () => {
     try {
@@ -166,20 +169,12 @@ function ApmtTime({
           </p>
           <div className="grid-row appointment-time-slots">
             <div className="ember-view grid-col grid-col-1-3-m grid-col-1-1-xs">
+              <h5 className="appointment-time-category-title font--bold m-top--16 m-bottom--8">
+                Morning
+              </h5>
               <div className="appointment-time-items w-background-light">
-                {dateData.schedule
-                  ?.map((el, index) => ({ el, index }))
-                  .filter(
-                    ({ el }) =>
-                      !el.isBooked &&
-                      (Date.now() - new Date(el.lastHold).getTime() >
-                        10 * 60 * 1000 ||
-                        (ctx.selectedTime.slot &&
-                          Date.now() - ctx.selectedTime.lastAdd + 1000 <
-                            10 * 60 * 1000 &&
-                          el._id === ctx.selectedTime.slot._id))
-                  )
-                  .map(({ el, index }) => {
+                {newSchedule.morning.length > 0 ? (
+                  newSchedule.morning.map(el => {
                     return (
                       <button
                         key={el._id}
@@ -190,7 +185,74 @@ function ApmtTime({
                         {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'}
                       </button>
                     );
-                  })}
+                  })
+                ) : (
+                  <button
+                    className="w-button w-button--small w-button--primary w-button--rounded all-booked-button"
+                    type="button"
+                    disabled
+                  >
+                    All book
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="ember-view grid-col grid-col-1-3-m grid-col-1-1-xs">
+              <h5 className="appointment-time-category-title font--bold m-top--16 m-bottom--8">
+                Afternoon
+              </h5>
+              <div className="appointment-time-items w-background-light">
+                {newSchedule.afternoon.length > 0 ? (
+                  newSchedule.afternoon.map(el => {
+                    return (
+                      <button
+                        key={el._id}
+                        type="button"
+                        className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
+                        onClick={() => handleOnClick(el._id)}
+                      >
+                        {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'}
+                      </button>
+                    );
+                  })
+                ) : (
+                  <button
+                    className="w-button w-button--small w-button--primary w-button--rounded all-booked-button"
+                    type="button"
+                    disabled
+                  >
+                    All book
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="ember-view grid-col grid-col-1-3-m grid-col-1-1-xs">
+              <h5 className="appointment-time-category-title font--bold m-top--16 m-bottom--8">
+                Evening
+              </h5>
+              <div className="appointment-time-items w-background-light">
+                {newSchedule.evening.length > 0 ? (
+                  newSchedule.evening.map(el => {
+                    return (
+                      <button
+                        key={el._id}
+                        type="button"
+                        className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
+                        onClick={() => handleOnClick(el._id)}
+                      >
+                        {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'}
+                      </button>
+                    );
+                  })
+                ) : (
+                  <button
+                    className="w-button w-button--small w-button--primary w-button--rounded all-booked-button"
+                    type="button"
+                    disabled
+                  >
+                    All book
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -213,6 +275,40 @@ const convertToTime = time => {
   return (
     time.toString() + ':00 ' + tail + ' - ' + time.toString() + ':50 ' + tail
   );
+};
+
+const splitSchedule = (schedule, ctx) => {
+  const newSchedule = {
+    morning: [],
+    afternoon: [],
+    evening: []
+  };
+
+  schedule
+    ?.filter(el => validate(el, ctx))
+    .forEach(el => {
+      if (el.time < 12) {
+        newSchedule.morning = [...newSchedule.morning, el];
+      } else if (el.time < 18) {
+        newSchedule.afternoon = [...newSchedule.afternoon, el];
+      } else {
+        newSchedule.evening = [...newSchedule.evening, el];
+      }
+    });
+
+  return newSchedule;
+};
+
+const validate = (el, ctx) => {
+  if (
+    !el.isBooked &&
+    (Date.now() - new Date(el.lastHold).getTime() > 10 * 60 * 1000 ||
+      (ctx.selectedTime.slot &&
+        Date.now() - ctx.selectedTime.lastAdd + 1000 < 10 * 60 * 1000 &&
+        el._id === ctx.selectedTime.slot._id))
+  )
+    return true;
+  return false;
 };
 
 export default ApmtTime;

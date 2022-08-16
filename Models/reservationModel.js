@@ -34,6 +34,11 @@ const reservationSchema = new mongoose.Schema({
     default: Date.now()
   },
   service: String,
+  isCancelled: {
+    type: Boolean,
+    require: true,
+    default: false
+  },
   slot: {
     type: String,
     trim: true,

@@ -7,4 +7,8 @@ router.route('/:id').get(reservationController.getReservation);
 
 router.route('/book-appointment').post(reservationController.createReservation);
 
+router
+  .route('/cancel-appointment/:id')
+  .post(reservationController.cancelReservation);
+
 module.exports = router;

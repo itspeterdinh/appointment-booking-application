@@ -141,7 +141,6 @@ function Calendar({
     );
   }
 
-  console.log(scheduleData[getIndex(today, selectedMonth)]);
   return (
     <div className="pt-5 m-bottom--32">
       <div className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6">
@@ -325,13 +324,5 @@ const colStartClasses = [
 const getIndex = (today, cur) => {
   return parse(cur, 'MMM-yyyy', new Date()).getMonth() - today.getMonth();
 };
-
-// const isFull = (schedule, id) => {
-//   console.log(schedule);
-//   if (schedule.length === 1 && schedule[0]._id !== id) {
-//     return true;
-//   }
-//   return false;
-// };
 
 export default Calendar;
