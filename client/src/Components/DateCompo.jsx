@@ -17,6 +17,20 @@ function DateCompo() {
   const [scheduleData, setScheduleData] = useState([]);
   const firstDayCurrentMonth = parse(selectedMonth, 'MMM-yyyy', new Date());
 
+  // const [monthTest, setMonthTest] = useState(new Date(ctx.selectedTime.date));
+  // const [array, setArray] = useState([]);
+  // // console.log(ctx.selectedTime.date);
+  // console.log(monthTest.getMonth() - today.getMonth());
+
+  // const test = () => {
+  //   if (monthTest.getMonth() - today.getMonth() >= array.length) {
+  //     let tempArray = Array(4).fill(undefined);
+  //     setArray([...tempArray, 'Hi']);
+  //   }
+  // };
+  // test();
+  // console.log(array);
+
   useEffect(() => {
     if (!ctx.state) {
       navigate('/service');

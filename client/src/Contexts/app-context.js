@@ -13,8 +13,7 @@ const AppContext = React.createContext({
   errorText: '',
   setErrorText: () => {},
   redirect: true,
-  setRedirect: () => {},
-  setUpLocalStorage: () => {}
+  setRedirect: () => {}
 });
 
 export const AppContextProvider = props => {
