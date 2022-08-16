@@ -97,7 +97,7 @@ function ApmtTime({
                 month: 'long',
                 day: 'numeric'
               }),
-              time: convertToTime(res.data.data.slot.time),
+              time: convertToTime(res.data.data.slot.time, true),
               slot: res.data.data.slot,
               lastAdd: Date.now()
             });
@@ -108,7 +108,7 @@ function ApmtTime({
                 month: 'long',
                 day: 'numeric'
               }),
-              time: convertToTime(res.data.data.slot.time),
+              time: convertToTime(res.data.data.slot.time, true),
               slot: res.data.data.slot,
               lastAdd: Date.now()
             });
@@ -182,7 +182,7 @@ function ApmtTime({
                         className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
                         onClick={() => handleOnClick(el._id)}
                       >
-                        {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'}
+                        {convertToTime(el.time, false)}
                       </button>
                     );
                   })
@@ -192,7 +192,7 @@ function ApmtTime({
                     type="button"
                     disabled
                   >
-                    All book
+                    All booked
                   </button>
                 )}
               </div>
@@ -211,7 +211,7 @@ function ApmtTime({
                         className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
                         onClick={() => handleOnClick(el._id)}
                       >
-                        {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'}
+                        {convertToTime(el.time, false)}
                       </button>
                     );
                   })
@@ -221,7 +221,7 @@ function ApmtTime({
                     type="button"
                     disabled
                   >
-                    All book
+                    All booked
                   </button>
                 )}
               </div>
@@ -240,7 +240,8 @@ function ApmtTime({
                         className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
                         onClick={() => handleOnClick(el._id)}
                       >
-                        {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'}
+                        {convertToTime(el.time, false)}
+                        {/* {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'} */}
                       </button>
                     );
                   })
@@ -250,7 +251,7 @@ function ApmtTime({
                     type="button"
                     disabled
                   >
-                    All book
+                    All booked
                   </button>
                 )}
               </div>
@@ -266,15 +267,18 @@ const getIndex = (today, cur) => {
   return parse(cur, 'MMM-yyyy', new Date()).getMonth() - today.getMonth();
 };
 
-const convertToTime = time => {
-  let tail = 'PM';
-  if (time < 12) {
-    tail = 'AM';
+const convertToTime = (time, full) => {
+  let tail = 'AM';
+  if (time >= 12) {
+    tail = 'PM';
+    if (time > 12) time -= 12;
   }
-
-  return (
-    time.toString() + ':00 ' + tail + ' - ' + time.toString() + ':50 ' + tail
-  );
+  if (full) {
+    return (
+      time.toString() + ':00 ' + tail + ' - ' + time.toString() + ':50 ' + tail
+    );
+  }
+  return time.toString() + ':00 ' + tail.toLowerCase();
 };
 
 const splitSchedule = (schedule, ctx) => {

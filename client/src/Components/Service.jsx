@@ -1,9 +1,25 @@
 import React from 'react';
-
 import ApmtSteps from './ApmtSteps';
 import ServiceCard from './ServiceCard';
 
+const setUpLocalStorage = () => {
+  if (!localStorage.getItem('blinkk-esthetics-appointment')) {
+    localStorage.setItem(
+      'blinkk-esthetics-appointment',
+      JSON.stringify({
+        lastUpdatedTime: Date.now(),
+        location: 'premises',
+        time: {},
+        services: [],
+        staffs: {}
+      })
+    );
+  }
+};
+
 function Service({ services }) {
+  setUpLocalStorage();
+
   return (
     <section className="container landing">
       <section className="row">

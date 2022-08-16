@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 
 const AppContext = React.createContext({
@@ -12,7 +13,8 @@ const AppContext = React.createContext({
   errorText: '',
   setErrorText: () => {},
   redirect: true,
-  setRedirect: () => {}
+  setRedirect: () => {},
+  setUpLocalStorage: () => {}
 });
 
 export const AppContextProvider = props => {
@@ -28,9 +30,12 @@ export const AppContextProvider = props => {
     if (action === 'add') {
       setSelectedServices(prev => [...prev, item]);
       addElement(item._id);
-    } else {
+    } else if (action === 'remove') {
       setSelectedServices(selectedServices.filter(el => el._id !== item._id));
       removeElement(item._id);
+    } else {
+      setSelectedServices([]);
+      setElement(new Set());
     }
   };
 
@@ -42,7 +47,7 @@ export const AppContextProvider = props => {
     setElement(prev => new Set([...prev].filter(x => x !== element)));
   };
 
-  useEffect(() => {
+  const setUpLocalStorage = () => {
     const newSession = {
       lastUpdatedTime: Date.now(),
       location: 'premises',
@@ -74,6 +79,10 @@ export const AppContextProvider = props => {
         });
       }
     }
+  };
+
+  useEffect(() => {
+    setUpLocalStorage();
   }, []);
 
   useEffect(() => {
@@ -87,16 +96,16 @@ export const AppContextProvider = props => {
   return (
     <AppContext.Provider
       value={{
-        element: element,
-        state: state,
-        selectedServices: selectedServices,
+        element,
+        state,
+        selectedServices,
         setSelectedServices: handleSelectedServices,
-        selectedTime: selectedTime,
-        setSelectedTime: setSelectedTime,
-        error: error,
-        setError: setError,
-        errorText: errorText,
-        setErrorText: setErrorText,
+        selectedTime,
+        setSelectedTime,
+        error,
+        setError,
+        errorText,
+        setErrorText,
         redirect,
         setRedirect
       }}

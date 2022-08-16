@@ -200,6 +200,9 @@ function ReservationForm() {
           slot: ctx.selectedTime.slot._id
         })
         .then(res => {
+          ctx.setSelectedServices();
+          ctx.setSelectedTime({});
+          localStorage.removeItem('blinkk-esthetics-appointment');
           navigate(`/reservation/${res.data.data.id}`);
         });
     } catch (err) {

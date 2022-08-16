@@ -29,7 +29,8 @@ exports.cancelReservation = catchAsync(async (req, res, next) => {
 
   await Slot.findByIdAndUpdate(req.body.slot, {
     reservation: undefined,
-    isBooked: false
+    isBooked: false,
+    lastHold: new Date('January 1, 2000, 12:00:00')
   });
 
   res.status(200).json({
@@ -39,4 +40,3 @@ exports.cancelReservation = catchAsync(async (req, res, next) => {
     }
   });
 });
-// exports.cancelReservation = factory.updateOne(Slot);
