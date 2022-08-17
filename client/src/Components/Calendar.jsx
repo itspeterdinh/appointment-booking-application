@@ -60,13 +60,46 @@ function Calendar({
             setSelectedDay(firstAvailableDate);
             setDateData(res.data.data.data[firstAvailableDate.getDate() - 1]);
           }
-          setScheduleData(prev => [
-            ...prev,
-            {
-              dateByMonth: res.data.data.data,
-              firstAvailableDate: firstAvailableDate
-            }
-          ]);
+          if (getIndex(today, selectedMonth) === scheduleData.length) {
+            setScheduleData(prev => [
+              ...prev,
+              {
+                dateByMonth: res.data.data.data,
+                firstAvailableDate: firstAvailableDate
+              }
+            ]);
+          } else if (getIndex(today, selectedMonth) > scheduleData.length) {
+            let tempScheduleData = Array(getIndex(today, selectedMonth)).fill(
+              undefined
+            );
+            setSelectedDay(new Date(ctx.selectedTime.date));
+            setDateData(
+              res.data.data.data[new Date(ctx.selectedTime.date).getDate() - 1]
+            );
+            setScheduleData([
+              ...tempScheduleData,
+              {
+                dateByMonth: res.data.data.data,
+                firstAvailableDate: firstAvailableDate
+              }
+            ]);
+          } else {
+            setScheduleData(prev => {
+              return prev.map((el, index) => {
+                if (
+                  index ===
+                  getIndex(today, format(firstDayCurrentMonth, 'MMM-yyyy'))
+                ) {
+                  return {
+                    dateByMonth: res.data.data.data,
+                    firstAvailableDate: firstAvailableDate
+                  };
+                } else {
+                  return el;
+                }
+              });
+            });
+          }
 
           if (res.data.data.firstAvaiDate) {
             setIsLoading(false);
@@ -81,34 +114,52 @@ function Calendar({
   };
 
   useEffect(() => {
-    if (getIndex(today, selectedMonth) >= scheduleData.length) {
+    if (
+      getIndex(today, selectedMonth) >= scheduleData.length ||
+      scheduleData[getIndex(today, selectedMonth)] === undefined
+    ) {
       fetchSchedule();
     } else {
       setIsLoading(false);
     }
   }, [selectedMonth]);
 
+  // useEffect(() => {
+  //   if (getIndex(today, selectedMonth) >= scheduleData.length) {
+  //     fetchSchedule();
+  //   } else {
+  //     setIsLoading(false);
+  //   }
+  // }, [selectedMonth]);
+
   function previousMonth() {
     const firstDayPreviousMonth = add(firstDayCurrentMonth, { months: -1 });
-    if (
-      scheduleData[getIndex(today, format(firstDayPreviousMonth, 'MMM-yyyy'))]
-        .firstAvailableDate
-    ) {
-      const selectedDay =
-        scheduleData[getIndex(today, format(firstDayPreviousMonth, 'MMM-yyyy'))]
-          .firstAvailableDate;
-      setDateData(
-        scheduleData[getIndex(today, format(firstDayPreviousMonth, 'MMM-yyyy'))]
-          .dateByMonth[selectedDay.getDate() - 1]
-      );
+    if (scheduleData[getIndex(today, selectedMonth) - 1] === undefined) {
+      setIsLoading(true);
+      setSelectedMonth(format(firstDayPreviousMonth, 'MMM-yyyy'));
     } else {
-      setDateData(undefined);
+      if (
+        scheduleData[getIndex(today, format(firstDayPreviousMonth, 'MMM-yyyy'))]
+          .firstAvailableDate
+      ) {
+        const selectedDay =
+          scheduleData[
+            getIndex(today, format(firstDayPreviousMonth, 'MMM-yyyy'))
+          ].firstAvailableDate;
+        setDateData(
+          scheduleData[
+            getIndex(today, format(firstDayPreviousMonth, 'MMM-yyyy'))
+          ].dateByMonth[selectedDay.getDate() - 1]
+        );
+      } else {
+        setDateData(undefined);
+      }
+      setSelectedDay(
+        scheduleData[getIndex(today, format(firstDayPreviousMonth, 'MMM-yyyy'))]
+          .firstAvailableDate
+      );
+      setSelectedMonth(format(firstDayPreviousMonth, 'MMM-yyyy'));
     }
-    setSelectedDay(
-      scheduleData[getIndex(today, format(firstDayPreviousMonth, 'MMM-yyyy'))]
-        .firstAvailableDate
-    );
-    setSelectedMonth(format(firstDayPreviousMonth, 'MMM-yyyy'));
   }
 
   function nextMonth() {
@@ -189,7 +240,7 @@ function Calendar({
               <div>S</div>
             </div>
             {!isLoading &&
-            getIndex(today, selectedMonth) < scheduleData.length ? (
+            scheduleData[getIndex(today, selectedMonth)] !== undefined ? (
               <div className="grid grid-cols-7 mt-2 mb-2 text-sm">
                 {days.map((day, dayIdx) => (
                   <div

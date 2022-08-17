@@ -12,24 +12,17 @@ function DateCompo() {
   const navigate = useNavigate();
   const [dateData, setDateData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedDay, setSelectedDay] = useState(today);
-  const [selectedMonth, setSelectedMonth] = useState(format(today, 'MMM-yyyy'));
+  const [selectedDay, setSelectedDay] = useState(
+    (ctx.selectedTime.date && new Date(ctx.selectedTime.date)) || today
+  );
+  const [selectedMonth, setSelectedMonth] = useState(
+    format(
+      (ctx.selectedTime.date && new Date(ctx.selectedTime.date)) || today,
+      'MMM-yyyy'
+    )
+  );
   const [scheduleData, setScheduleData] = useState([]);
   const firstDayCurrentMonth = parse(selectedMonth, 'MMM-yyyy', new Date());
-
-  // const [monthTest, setMonthTest] = useState(new Date(ctx.selectedTime.date));
-  // const [array, setArray] = useState([]);
-  // // console.log(ctx.selectedTime.date);
-  // console.log(monthTest.getMonth() - today.getMonth());
-
-  // const test = () => {
-  //   if (monthTest.getMonth() - today.getMonth() >= array.length) {
-  //     let tempArray = Array(4).fill(undefined);
-  //     setArray([...tempArray, 'Hi']);
-  //   }
-  // };
-  // test();
-  // console.log(array);
 
   useEffect(() => {
     if (!ctx.state) {

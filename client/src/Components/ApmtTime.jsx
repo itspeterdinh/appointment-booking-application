@@ -172,89 +172,19 @@ function ApmtTime({
               <h5 className="appointment-time-category-title font--bold m-top--16 m-bottom--8">
                 Morning
               </h5>
-              <div className="appointment-time-items w-background-light">
-                {newSchedule.morning.length > 0 ? (
-                  newSchedule.morning.map(el => {
-                    return (
-                      <button
-                        key={el._id}
-                        type="button"
-                        className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
-                        onClick={() => handleOnClick(el._id)}
-                      >
-                        {convertToTime(el.time, false)}
-                      </button>
-                    );
-                  })
-                ) : (
-                  <button
-                    className="w-button w-button--small w-button--primary w-button--rounded all-booked-button"
-                    type="button"
-                    disabled
-                  >
-                    All booked
-                  </button>
-                )}
-              </div>
+              {timeSlotContainer(newSchedule.morning, ctx, handleOnClick)}
             </div>
             <div className="ember-view grid-col grid-col-1-3-m grid-col-1-1-xs">
               <h5 className="appointment-time-category-title font--bold m-top--16 m-bottom--8">
                 Afternoon
               </h5>
-              <div className="appointment-time-items w-background-light">
-                {newSchedule.afternoon.length > 0 ? (
-                  newSchedule.afternoon.map(el => {
-                    return (
-                      <button
-                        key={el._id}
-                        type="button"
-                        className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
-                        onClick={() => handleOnClick(el._id)}
-                      >
-                        {convertToTime(el.time, false)}
-                      </button>
-                    );
-                  })
-                ) : (
-                  <button
-                    className="w-button w-button--small w-button--primary w-button--rounded all-booked-button"
-                    type="button"
-                    disabled
-                  >
-                    All booked
-                  </button>
-                )}
-              </div>
+              {timeSlotContainer(newSchedule.afternoon, ctx, handleOnClick)}
             </div>
             <div className="ember-view grid-col grid-col-1-3-m grid-col-1-1-xs">
               <h5 className="appointment-time-category-title font--bold m-top--16 m-bottom--8">
                 Evening
               </h5>
-              <div className="appointment-time-items w-background-light">
-                {newSchedule.evening.length > 0 ? (
-                  newSchedule.evening.map(el => {
-                    return (
-                      <button
-                        key={el._id}
-                        type="button"
-                        className="time-item w-button w-button--small w-button--primary w-button--rounded button--primary"
-                        onClick={() => handleOnClick(el._id)}
-                      >
-                        {convertToTime(el.time, false)}
-                        {/* {el.time < 12 ? el.time + ':00 am' : el.time + ':00 pm'} */}
-                      </button>
-                    );
-                  })
-                ) : (
-                  <button
-                    className="w-button w-button--small w-button--primary w-button--rounded all-booked-button"
-                    type="button"
-                    disabled
-                  >
-                    All booked
-                  </button>
-                )}
-              </div>
+              {timeSlotContainer(newSchedule.evening, ctx, handleOnClick)}
             </div>
           </div>
         </div>
@@ -313,6 +243,42 @@ const validate = (el, ctx) => {
   )
     return true;
   return false;
+};
+
+const timeSlotContainer = (timeSlotList, ctx, handleOnClick) => {
+  return (
+    <div className="appointment-time-items w-background-light">
+      {timeSlotList.length > 0 ? (
+        timeSlotList.map(el => {
+          return (
+            <button
+              key={el._id}
+              type="button"
+              className={
+                'time-item w-button w-button--small w-button--primary w-button--rounded ' +
+                (ctx.selectedTime.slot && el._id === ctx.selectedTime.slot._id
+                  ? 'w-button--secondary'
+                  : 'button--primary')
+              }
+              onClick={() => handleOnClick(el._id)}
+            >
+              {(ctx.selectedTime.slot && el._id === ctx.selectedTime.slot._id
+                ? '✔ '
+                : '') + convertToTime(el.time, false)}
+            </button>
+          );
+        })
+      ) : (
+        <button
+          className="w-button w-button--small w-button--primary w-button--rounded all-booked-button"
+          type="button"
+          disabled
+        >
+          All booked
+        </button>
+      )}
+    </div>
+  );
 };
 
 export default ApmtTime;
