@@ -57,8 +57,6 @@ function Calendar({
               res.data.data.firstAvaiDate.month,
               res.data.data.firstAvaiDate.date
             );
-            setSelectedDay(firstAvailableDate);
-            setDateData(res.data.data.data[firstAvailableDate.getDate() - 1]);
           }
           if (getIndex(today, selectedMonth) === scheduleData.length) {
             setScheduleData(prev => [
@@ -102,6 +100,8 @@ function Calendar({
           }
 
           if (res.data.data.firstAvaiDate) {
+            setSelectedDay(firstAvailableDate);
+            setDateData(res.data.data.data[firstAvailableDate.getDate() - 1]);
             setIsLoading(false);
           } else {
             const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
@@ -165,7 +165,7 @@ function Calendar({
   function nextMonth() {
     const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
     if (
-      firstDayNextMonth.getMonth() - today.getMonth() >=
+      getIndex(today, format(firstDayNextMonth, 'MMM-yyyy')) >=
       scheduleData.length
     ) {
       setIsLoading(true);
@@ -220,11 +220,11 @@ function Calendar({
                 type="button"
                 className={
                   '-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-gray-400 none-border ' +
-                  (getIndex(today, selectedMonth) > 1
+                  (getIndex(today, selectedMonth) > 5
                     ? 'text-gray-200'
                     : 'hover:text-gray-500')
                 }
-                disabled={getIndex(today, selectedMonth) > 1}
+                disabled={getIndex(today, selectedMonth) > 5}
               >
                 <span className="sr-only">Next month</span>
                 <ChevronRightIcon className="w-7 h-9" aria-hidden="true" />
@@ -373,7 +373,18 @@ const colStartClasses = [
 ];
 
 const getIndex = (today, cur) => {
-  return parse(cur, 'MMM-yyyy', new Date()).getMonth() - today.getMonth();
+  const multiplier =
+    parse(cur, 'MMM-yyyy', new Date()).getYear() - today.getYear();
+  // console.log(
+  //   parse(cur, 'MMM-yyyy', new Date()).getMonth() +
+  //     12 * multiplier -
+  //     today.getMonth()
+  // );
+  return (
+    parse(cur, 'MMM-yyyy', new Date()).getMonth() +
+    12 * multiplier -
+    today.getMonth()
+  );
 };
 
 export default Calendar;

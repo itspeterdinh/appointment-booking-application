@@ -76,8 +76,8 @@ exports.getAllDate = catchAsync(async (req, res, next) => {
 });
 
 exports.createDateDocuments = catchAsync(async (req, res, next) => {
-  const year = 2022;
-  const month = 9;
+  const year = 2023;
+  const month = 1;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   let i = 1;
