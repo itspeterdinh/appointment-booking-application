@@ -165,7 +165,7 @@ function Calendar({
   function nextMonth() {
     const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
     if (
-      getIndex(today, format(firstDayNextMonth, 'MMM-yyyy')) >=
+      getIndex(today, format(firstDayNextMonth, 'MMM-yyyy')) ===
       scheduleData.length
     ) {
       setIsLoading(true);
