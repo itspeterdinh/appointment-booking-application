@@ -58,24 +58,9 @@ function Calendar({
               res.data.data.firstAvaiDate.date
             );
           }
-          if (getIndex(today, selectedMonth) === scheduleData.length) {
+          if (getIndex(today, selectedMonth) >= scheduleData.length) {
             setScheduleData(prev => [
               ...prev,
-              {
-                dateByMonth: res.data.data.data,
-                firstAvailableDate: firstAvailableDate
-              }
-            ]);
-          } else if (getIndex(today, selectedMonth) > scheduleData.length) {
-            let tempScheduleData = Array(getIndex(today, selectedMonth)).fill(
-              undefined
-            );
-            setSelectedDay(new Date(ctx.selectedTime.date));
-            setDateData(
-              res.data.data.data[new Date(ctx.selectedTime.date).getDate() - 1]
-            );
-            setScheduleData([
-              ...tempScheduleData,
               {
                 dateByMonth: res.data.data.data,
                 firstAvailableDate: firstAvailableDate
@@ -98,12 +83,22 @@ function Calendar({
               });
             });
           }
-
           if (res.data.data.firstAvaiDate) {
-            setSelectedDay(firstAvailableDate);
-            setDateData(res.data.data.data[firstAvailableDate.getDate() - 1]);
+            if (
+              ctx.selectedTime.date &&
+              new Date(ctx.selectedTime.date).getMonth() ===
+                res.data.data.firstAvaiDate.month &&
+              new Date(ctx.selectedTime.date).getDate() !==
+                res.data.data.firstAvaiDate.date
+            ) {
+              setDateData(res.data.data.data[selectedDay.getDate() - 1]);
+            } else {
+              setSelectedDay(firstAvailableDate);
+              setDateData(res.data.data.data[firstAvailableDate.getDate() - 1]);
+            }
             setIsLoading(false);
           } else {
+            setSelectedDay(undefined);
             const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
             setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
           }
@@ -123,14 +118,6 @@ function Calendar({
       setIsLoading(false);
     }
   }, [selectedMonth]);
-
-  // useEffect(() => {
-  //   if (getIndex(today, selectedMonth) >= scheduleData.length) {
-  //     fetchSchedule();
-  //   } else {
-  //     setIsLoading(false);
-  //   }
-  // }, [selectedMonth]);
 
   function previousMonth() {
     const firstDayPreviousMonth = add(firstDayCurrentMonth, { months: -1 });
@@ -165,7 +152,7 @@ function Calendar({
   function nextMonth() {
     const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
     if (
-      getIndex(today, format(firstDayNextMonth, 'MMM-yyyy')) ===
+      getIndex(today, format(firstDayNextMonth, 'MMM-yyyy')) >=
       scheduleData.length
     ) {
       setIsLoading(true);
@@ -375,11 +362,6 @@ const colStartClasses = [
 const getIndex = (today, cur) => {
   const multiplier =
     parse(cur, 'MMM-yyyy', new Date()).getYear() - today.getYear();
-  // console.log(
-  //   parse(cur, 'MMM-yyyy', new Date()).getMonth() +
-  //     12 * multiplier -
-  //     today.getMonth()
-  // );
   return (
     parse(cur, 'MMM-yyyy', new Date()).getMonth() +
     12 * multiplier -

@@ -21,7 +21,11 @@ function DateCompo() {
       'MMM-yyyy'
     )
   );
-  const [scheduleData, setScheduleData] = useState([]);
+  const [scheduleData, setScheduleData] = useState(
+    (ctx.selectedTime.date &&
+      Array(getIndex(today, selectedMonth)).fill(undefined)) ||
+      []
+  );
   const firstDayCurrentMonth = parse(selectedMonth, 'MMM-yyyy', new Date());
 
   useEffect(() => {
@@ -69,5 +73,15 @@ function DateCompo() {
     </section>
   );
 }
+
+const getIndex = (today, cur) => {
+  const multiplier =
+    parse(cur, 'MMM-yyyy', new Date()).getYear() - today.getYear();
+  return (
+    parse(cur, 'MMM-yyyy', new Date()).getMonth() +
+    12 * multiplier -
+    today.getMonth()
+  );
+};
 
 export default DateCompo;

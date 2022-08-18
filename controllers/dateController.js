@@ -62,7 +62,10 @@ exports.getAllDate = catchAsync(async (req, res, next) => {
   const firstAvailability = await doc.find(
     element =>
       new Date(element.year, element.month, element.date) >= today &&
-      !element.isFull
+      element.schedule.filter(
+        el =>
+          !el.isBooked && Date.now() - el.lastHold.getTime() > 10 * 60 * 1000
+      ).length > 0
   );
 
   res.status(200).json({
@@ -76,8 +79,8 @@ exports.getAllDate = catchAsync(async (req, res, next) => {
 });
 
 exports.createDateDocuments = catchAsync(async (req, res, next) => {
-  const year = 2023;
-  const month = 1;
+  const year = 2022;
+  const month = 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   let i = 1;
@@ -86,7 +89,7 @@ exports.createDateDocuments = catchAsync(async (req, res, next) => {
     for (let j = 9; j <= 15; j++) {
       const newSlot = await Slot.create({
         time: j,
-        isBooked: false,
+        isBooked: true,
         lastHold: new Date('January 1, 2000, 12:00:00')
       });
       schedule = [...schedule, newSlot];
