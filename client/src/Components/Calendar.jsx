@@ -57,6 +57,14 @@ function Calendar({
               res.data.data.firstAvaiDate.month,
               res.data.data.firstAvaiDate.date
             );
+          } else {
+            if (
+              ctx.selectedTime.date &&
+              new Date(ctx.selectedTime.date).getMonth() ===
+                firstDayCurrentMonth.getMonth()
+            ) {
+              firstAvailableDate = new Date(ctx.selectedTime.date);
+            }
           }
           if (getIndex(today, selectedMonth) >= scheduleData.length) {
             setScheduleData(prev => [
@@ -83,6 +91,7 @@ function Calendar({
               });
             });
           }
+
           if (res.data.data.firstAvaiDate) {
             if (
               ctx.selectedTime.date &&
@@ -98,9 +107,25 @@ function Calendar({
             }
             setIsLoading(false);
           } else {
-            setSelectedDay(undefined);
-            const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
-            setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
+            if (
+              ctx.selectedTime.date &&
+              new Date(ctx.selectedTime.date).getMonth() ===
+                firstDayCurrentMonth.getMonth()
+            ) {
+              setSelectedDay(new Date(ctx.selectedTime.date));
+              setDateData(
+                res.data.data.data[
+                  new Date(ctx.selectedTime.date).getDate() - 1
+                ]
+              );
+              setIsLoading(false);
+            } else {
+              setSelectedDay(undefined);
+              const firstDayNextMonth = add(firstDayCurrentMonth, {
+                months: 1
+              });
+              setSelectedMonth(format(firstDayNextMonth, 'MMM-yyyy'));
+            }
           }
         });
     } catch (err) {

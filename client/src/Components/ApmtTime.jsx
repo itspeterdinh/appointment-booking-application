@@ -22,8 +22,6 @@ function ApmtTime({
   const navigate = useNavigate();
   date.setFullYear(dateData.year, dateData.month, dateData.date);
 
-  // console.log(newSchedule);
-
   const fetchSchedule = async () => {
     try {
       await axios
@@ -38,8 +36,12 @@ function ApmtTime({
               res.data.data.firstAvaiDate.month,
               res.data.data.firstAvaiDate.date
             );
+            console.log(selectedDay);
             setSelectedDay(selectedDay);
             setDateData(res.data.data.data[selectedDay.getDate() - 1]);
+          } else {
+            setSelectedDay(undefined);
+            setDateData(undefined);
           }
           setScheduleData(prev => {
             return prev.map((el, index) => {
