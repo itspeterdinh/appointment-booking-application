@@ -36,7 +36,6 @@ function ApmtTime({
               res.data.data.firstAvaiDate.month,
               res.data.data.firstAvaiDate.date
             );
-            console.log(selectedDay);
             setSelectedDay(selectedDay);
             setDateData(res.data.data.data[selectedDay.getDate() - 1]);
           } else {
