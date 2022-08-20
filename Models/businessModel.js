@@ -25,11 +25,26 @@ const businessSchema = new mongoose.Schema({
     trim: true
   },
   phone: String,
-  instagram: String
+  instagram: String,
+  services: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Service'
+    }
+  ]
 });
 
 businessSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
+  next();
+});
+
+businessSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'services',
+    select: 'name description time price'
+  });
+
   next();
 });
 
