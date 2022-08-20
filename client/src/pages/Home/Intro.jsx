@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Button from '../../components/UI/Button/Button';
 
 function Intro(props) {
   const [toggle, setToggle] = useState(true);
@@ -21,9 +22,9 @@ function Intro(props) {
         <h3 className="font--bold m-bottom--16 company-name">{props.name}</h3>
       </div>
       <Link to="/service">
-        <button className="w-button w-button--large w-button--primary w-button--rounded m-bottom--24">
+        <Button className="w-button w-button--large w-button--primary w-button--rounded m-bottom--24">
           Book an Appointment
-        </button>
+        </Button>
       </Link>
       <p className="m-bottom--32">
         {toggle

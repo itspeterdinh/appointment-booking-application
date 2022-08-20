@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ApmtSteps from './ApmtSteps';
+import ApmtSteps from '../../components/ApmtSteps';
 import Calendar from './Calendar';
 import ApmtTime from './ApmtTime';
-import AppContext from '../Contexts/app-context';
+import AppContext from '../../contexts/app-context';
 import { format, parse, startOfToday } from 'date-fns';
 
 function DateCompo() {

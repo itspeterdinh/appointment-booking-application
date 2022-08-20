@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import AppContext from '../Contexts/app-context';
+import AppContext from '../../contexts/app-context';
 
 function ServiceCard({ index, service }) {
   const ctx = useContext(AppContext);

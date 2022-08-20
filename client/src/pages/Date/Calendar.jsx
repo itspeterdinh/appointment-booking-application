@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useContext } from 'react';
-import AppContext from '../Contexts/app-context';
+import AppContext from '../../contexts/app-context';
 import axios from 'axios';
+import Button from '../../components/UI/Button/Button';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import {
   add,
@@ -17,12 +18,6 @@ import {
   isBefore,
   isAfter
 } from 'date-fns';
-
-import '.././Styles/globals.css';
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
-}
 
 function Calendar({
   setDateData,
@@ -213,7 +208,7 @@ function Calendar({
               <h2 className="flex-auto font-semibold text-gray-800">
                 {!isLoading && format(firstDayCurrentMonth, 'MMM yyyy')}
               </h2>
-              <button
+              <Button
                 type="button"
                 onClick={previousMonth}
                 className={
@@ -226,8 +221,8 @@ function Calendar({
               >
                 <span className="sr-only">Previous month</span>
                 <ChevronLeftIcon className="w-7 h-9" aria-hidden="true" />
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={nextMonth}
                 type="button"
                 className={
@@ -240,7 +235,7 @@ function Calendar({
               >
                 <span className="sr-only">Next month</span>
                 <ChevronRightIcon className="w-7 h-9" aria-hidden="true" />
-              </button>
+              </Button>
             </div>
             <div className="grid grid-cols-7 mt-5 text-xs leading-6 text-center text-gray-1300">
               <div>S</div>
@@ -262,90 +257,30 @@ function Calendar({
                       'py-1.5'
                     )}
                   >
-                    <button
+                    <Button
                       type="button"
                       onClick={() => handleOnClick(day)}
-                      disabled={
-                        isToday(day) ||
-                        isBefore(day, today) ||
-                        scheduleData[
-                          getIndex(today, selectedMonth)
-                        ].dateByMonth[day.getDate() - 1].schedule.filter(
-                          el =>
-                            (ctx.selectedTime.slot &&
-                              el._id === ctx.selectedTime.slot._id) ||
-                            (!el.isBooked &&
-                              Date.now() - new Date(el.lastHold).getTime() >
-                                10 * 60 * 1000)
-                        ).length === 0
-                      }
-                      className={classNames(
-                        isEqual(day, selectedDay) && 'text-white',
-                        !isEqual(day, selectedDay) &&
-                          isToday(day) &&
-                          'text-red-500',
-                        !isEqual(day, selectedDay) &&
-                          isAfter(day, today) &&
-                          !(
-                            scheduleData[
-                              getIndex(today, selectedMonth)
-                            ].dateByMonth[day.getDate() - 1].schedule.filter(
-                              el =>
-                                (ctx.selectedTime.slot &&
-                                  el._id === ctx.selectedTime.slot._id) ||
-                                (!el.isBooked &&
-                                  Date.now() - new Date(el.lastHold).getTime() >
-                                    10 * 60 * 1000)
-                            ).length === 0
-                          ) &&
-                          'text-blue-700 blue-border',
-                        !isEqual(day, selectedDay) &&
-                          !isToday(day) &&
-                          !isSameMonth(day, firstDayCurrentMonth) &&
-                          'text-gray-400',
-                        isEqual(day, selectedDay) &&
-                          isToday(day) &&
-                          'bg-red-500',
-                        isEqual(day, selectedDay) &&
-                          !isToday(day) &&
-                          'bg-blue-500',
-                        !isEqual(day, selectedDay) &&
-                          !isToday(day) &&
-                          !isBefore(day, today) &&
-                          !(
-                            scheduleData[
-                              getIndex(today, selectedMonth)
-                            ].dateByMonth[day.getDate() - 1].schedule.filter(
-                              el =>
-                                (ctx.selectedTime.slot &&
-                                  el._id === ctx.selectedTime.slot._id) ||
-                                (!el.isBooked &&
-                                  Date.now() - new Date(el.lastHold).getTime() >
-                                    10 * 60 * 1000)
-                            ).length === 0
-                          ) &&
-                          'hover:bg-gray-200',
-                        (isEqual(day, selectedDay) || isToday(day)) &&
-                          'font-semibold',
-                        (isBefore(day, today) ||
-                          scheduleData[
-                            getIndex(today, selectedMonth)
-                          ].dateByMonth[day.getDate() - 1].schedule.filter(
-                            el =>
-                              (ctx.selectedTime.slot &&
-                                el._id === ctx.selectedTime.slot._id) ||
-                              (!el.isBooked &&
-                                Date.now() - new Date(el.lastHold).getTime() >
-                                  10 * 60 * 1000)
-                          ).length === 0) &&
-                          'text-gray-400',
-                        'mx-auto flex h-10 w-10 items-center justify-center rounded-full none-border font--bold'
+                      disabled={isDisabled(
+                        day,
+                        today,
+                        selectedMonth,
+                        scheduleData,
+                        ctx
+                      )}
+                      className={getClassName(
+                        day,
+                        today,
+                        selectedDay,
+                        scheduleData,
+                        selectedMonth,
+                        firstDayCurrentMonth,
+                        ctx
                       )}
                     >
                       <time dateTime={format(day, 'yyyy-MM-dd')}>
                         {format(day, 'd')}
                       </time>
-                    </button>
+                    </Button>
                   </div>
                 ))}
                 <div className="py-1.5"></div>
@@ -384,6 +319,10 @@ const colStartClasses = [
   'col-start-7'
 ];
 
+const classNames = (...classes) => {
+  return classes.filter(Boolean).join(' ');
+};
+
 const getIndex = (today, cur) => {
   const multiplier =
     parse(cur, 'MMM-yyyy', new Date()).getYear() - today.getYear();
@@ -391,6 +330,81 @@ const getIndex = (today, cur) => {
     parse(cur, 'MMM-yyyy', new Date()).getMonth() +
     12 * multiplier -
     today.getMonth()
+  );
+};
+
+const getClassName = (
+  day,
+  today,
+  selectedDay,
+  scheduleData,
+  selectedMonth,
+  firstDayCurrentMonth,
+  ctx
+) => {
+  return classNames(
+    isEqual(day, selectedDay) && 'text-white',
+    !isEqual(day, selectedDay) && isToday(day) && 'text-red-500',
+    !isEqual(day, selectedDay) &&
+      isAfter(day, today) &&
+      !(
+        scheduleData[getIndex(today, selectedMonth)].dateByMonth[
+          day.getDate() - 1
+        ].schedule.filter(
+          el =>
+            (ctx.selectedTime.slot && el._id === ctx.selectedTime.slot._id) ||
+            (!el.isBooked &&
+              Date.now() - new Date(el.lastHold).getTime() > 10 * 60 * 1000)
+        ).length === 0
+      ) &&
+      'text-blue-700 blue-border',
+    !isEqual(day, selectedDay) &&
+      !isToday(day) &&
+      !isSameMonth(day, firstDayCurrentMonth) &&
+      'text-gray-400',
+    isEqual(day, selectedDay) && isToday(day) && 'bg-red-500',
+    isEqual(day, selectedDay) && !isToday(day) && 'bg-blue-500',
+    !isEqual(day, selectedDay) &&
+      !isToday(day) &&
+      !isBefore(day, today) &&
+      !(
+        scheduleData[getIndex(today, selectedMonth)].dateByMonth[
+          day.getDate() - 1
+        ].schedule.filter(
+          el =>
+            (ctx.selectedTime.slot && el._id === ctx.selectedTime.slot._id) ||
+            (!el.isBooked &&
+              Date.now() - new Date(el.lastHold).getTime() > 10 * 60 * 1000)
+        ).length === 0
+      ) &&
+      'hover:bg-gray-200',
+    (isEqual(day, selectedDay) || isToday(day)) && 'font-semibold',
+    (isBefore(day, today) ||
+      scheduleData[getIndex(today, selectedMonth)].dateByMonth[
+        day.getDate() - 1
+      ].schedule.filter(
+        el =>
+          (ctx.selectedTime.slot && el._id === ctx.selectedTime.slot._id) ||
+          (!el.isBooked &&
+            Date.now() - new Date(el.lastHold).getTime() > 10 * 60 * 1000)
+      ).length === 0) &&
+      'text-gray-400',
+    'mx-auto flex h-10 w-10 items-center justify-center rounded-full none-border font--bold'
+  );
+};
+
+const isDisabled = (day, today, selectedMonth, scheduleData, ctx) => {
+  return (
+    isToday(day) ||
+    isBefore(day, today) ||
+    scheduleData[getIndex(today, selectedMonth)].dateByMonth[
+      day.getDate() - 1
+    ].schedule.filter(
+      el =>
+        (ctx.selectedTime.slot && el._id === ctx.selectedTime.slot._id) ||
+        (!el.isBooked &&
+          Date.now() - new Date(el.lastHold).getTime() > 10 * 60 * 1000)
+    ).length === 0
   );
 };
 

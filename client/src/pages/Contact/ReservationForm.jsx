@@ -6,7 +6,7 @@ import React, {
   useReducer,
   useContext
 } from 'react';
-import AppContext from '../Contexts/app-context';
+import AppContext from '../../contexts/app-context';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 

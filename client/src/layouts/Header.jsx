@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import AppContext from '../Contexts/app-context';
+import AppContext from '../contexts/app-context';
 
 function Header(props) {
   const ctx = useContext(AppContext);

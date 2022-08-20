@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Button from '../../components/UI/Button/Button';
 
 function getWindowSize() {
   const { innerWidth } = window;
@@ -42,12 +43,12 @@ function Connect(props) {
         </div>
       )}
       {isMobile && (
-        <button
+        <Button
           className="w-button w-button--large w-button--secondary w-button--rounded w-button--full-width-mobile"
           onClick={() => setToggle(prev => !prev)}
         >
           {toggle ? 'Less' : 'More'}
-        </button>
+        </Button>
       )}
     </section>
   );

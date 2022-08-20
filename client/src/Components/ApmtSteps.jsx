@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import AppContext from '../Contexts/app-context';
+import AppContext from '../contexts/app-context';
 import { Link } from 'react-router-dom';
 
 function ApmtSteps(props) {

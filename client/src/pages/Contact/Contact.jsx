@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AppContext from '../Contexts/app-context';
-import ApmtSteps from './ApmtSteps';
+import AppContext from '../../contexts/app-context';
+import ApmtSteps from '../../components/ApmtSteps';
 import ReservationForm from './ReservationForm';
 
 function Contact() {

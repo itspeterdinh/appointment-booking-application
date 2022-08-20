@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import AppContext from '../Contexts/app-context';
+import Button from '../components/UI/Button/Button';
+import AppContext from '../contexts/app-context';
 
 function ToolBar() {
   const ctx = useContext(AppContext);
@@ -32,7 +33,7 @@ function ToolBar() {
     <nav className="widget-toolbar-container">
       <div className="widget-toolbar-container__actions">
         {location.pathname === '/service' && (
-          <button
+          <Button
             type="button"
             className="w-button w-button--small w-button--primary w-button--rounded 
           widget-toolbar-container__button widget-toolbar-container__button--continue 
@@ -41,11 +42,11 @@ function ToolBar() {
             onClick={navigateHandler}
           >
             Continue
-          </button>
+          </Button>
         )}
         {(location.pathname === '/date' ||
           location.pathname === '/contact') && (
-          <button
+          <Button
             type="button"
             className="w-button w-button--small w-button--secondary w-button--rounded 
           widget-toolbar-container__button widget-toolbar-container__button--previous 
@@ -53,7 +54,7 @@ function ToolBar() {
             onClick={navigateBack}
           >
             Back
-          </button>
+          </Button>
         )}
       </div>
     </nav>

@@ -1,8 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useContext } from 'react';
-import { staffs } from './TestData';
 import { useNavigate } from 'react-router-dom';
-import AppContext from '../Contexts/app-context';
+import AppContext from '../../contexts/app-context';
 
 function Main({ services }) {
   const [arr, setArr] = useState([
@@ -109,5 +108,10 @@ const staffCard = data => {
     </a>
   );
 };
+
+const staffs = [
+  { id: 100, name: 'Rosie Uyen Kieu' },
+  { id: 101, name: 'Vuberry Hoai Vu' }
+];
 
 export default Main;

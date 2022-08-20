@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import axios from 'axios';
 import React, { useContext } from 'react';
-import AppContext from '../Contexts/app-context';
+import AppContext from '../../contexts/app-context';
 import { format, startOfToday, parse } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import Button from '../../components/UI/Button/Button';
 
 function ApmtTime({
   dateData,
@@ -252,7 +253,7 @@ const timeSlotContainer = (timeSlotList, ctx, handleOnClick) => {
       {timeSlotList.length > 0 ? (
         timeSlotList.map(el => {
           return (
-            <button
+            <Button
               key={el._id}
               type="button"
               className={
@@ -266,17 +267,17 @@ const timeSlotContainer = (timeSlotList, ctx, handleOnClick) => {
               {(ctx.selectedTime.slot && el._id === ctx.selectedTime.slot._id
                 ? '✔ '
                 : '') + convertToTime(el.time, false)}
-            </button>
+            </Button>
           );
         })
       ) : (
-        <button
+        <Button
           className="w-button w-button--small w-button--primary w-button--rounded all-booked-button"
           type="button"
           disabled
         >
           All booked
-        </button>
+        </Button>
       )}
     </div>
   );

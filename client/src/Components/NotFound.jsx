@@ -1,5 +1,5 @@
 import React from 'react';
-//https://squareup.com/appointments/book/reservations/a4mgd2jtrktnhy
+
 function NotFound() {
   return (
     <div className="container landing">

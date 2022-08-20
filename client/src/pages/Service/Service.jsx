@@ -1,5 +1,5 @@
 import React from 'react';
-import ApmtSteps from './ApmtSteps';
+import ApmtSteps from '../../components/ApmtSteps';
 import ServiceCard from './ServiceCard';
 
 const setUpLocalStorage = () => {

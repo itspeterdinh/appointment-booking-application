@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 import './Styles/globals.css';
-import Section from './Components/Section';
-import Service from './Components/Service';
-import DateCompo from './Components/DateCompo';
-import Contact from './Components/Contact';
-import Reservation from './Components/Reservations';
-import NotFound from './Components/NotFound';
-import PageLayout from './Components/PageLayout';
+import Home from './pages/Home/Home';
+import Service from './pages/Service/Service';
+import DateCompo from './pages/Date/DateCompo';
+import Contact from './pages/Contact/Contact';
+import Reservation from './pages/Reservation/Reservations';
+import NotFound from './components/NotFound';
+import PageLayout from './layouts/PageLayout';
 
 function App() {
   const [business, setBusiness] = useState(null);
@@ -55,7 +55,7 @@ function App() {
               >
                 <Route
                   path="/"
-                  element={<Section business={business} services={services} />}
+                  element={<Home business={business} services={services} />}
                 />
                 <Route
                   path="/service"
