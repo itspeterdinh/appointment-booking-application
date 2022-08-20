@@ -6,7 +6,7 @@ import ApmtTime from './ApmtTime';
 import AppContext from '../../contexts/app-context';
 import { format, parse, startOfToday } from 'date-fns';
 
-function DateCompo() {
+function DateCompo({ id }) {
   const today = startOfToday();
   const ctx = useContext(AppContext);
   const navigate = useNavigate();
@@ -21,6 +21,13 @@ function DateCompo() {
       'MMM-yyyy'
     )
   );
+
+  useEffect(() => {
+    if (ctx.selectedServices.length === 0) {
+      navigate(`/${id}/service`);
+    }
+  }, [id, ctx.selectedServices, navigate]);
+
   const [scheduleData, setScheduleData] = useState(
     (ctx.selectedTime.date &&
       Array(getIndex(today, selectedMonth)).fill(undefined)) ||
@@ -28,17 +35,11 @@ function DateCompo() {
   );
   const firstDayCurrentMonth = parse(selectedMonth, 'MMM-yyyy', new Date());
 
-  useEffect(() => {
-    if (!ctx.state) {
-      navigate('/service');
-    }
-  }, [ctx.state, navigate]);
-
   return (
     <section className="container landing">
       <section className="row">
         <aside className="col col-md-3 m-bottom--32 w-background-light display-desktop appointment-info font--small">
-          <ApmtSteps step="date" />
+          <ApmtSteps id={id} step="date" />
         </aside>
         <div className="appointment-content w-background-light-col col col-sm-10 offset-sm-1 col-md-8">
           <h3 className="font--bold m-bottom--8">
@@ -58,6 +59,7 @@ function DateCompo() {
           />
           {dateData && (
             <ApmtTime
+              id={id}
               dateData={dateData}
               setDateData={setDateData}
               isLoading={isLoading}

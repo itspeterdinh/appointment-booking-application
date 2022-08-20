@@ -3,11 +3,11 @@ import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import ToolBar from './ToolBar';
 
-function PageLayout({ name, avatar }) {
+function PageLayout({ business }) {
   return (
     <>
-      <Header name={name} avatar={avatar} />
-      <ToolBar />
+      <Header business={business} />
+      <ToolBar business={business} />
       <Outlet />
     </>
   );

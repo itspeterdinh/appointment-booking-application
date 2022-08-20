@@ -21,7 +21,7 @@ function Intro(props) {
       <div className="m-bottom--24">
         <h3 className="font--bold m-bottom--16 company-name">{props.name}</h3>
       </div>
-      <Link to="/service">
+      <Link to={`/${props.id}/service`}>
         <Button className="w-button w-button--large w-button--primary w-button--rounded m-bottom--24">
           Book an Appointment
         </Button>

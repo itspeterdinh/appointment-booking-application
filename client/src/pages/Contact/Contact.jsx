@@ -4,23 +4,23 @@ import AppContext from '../../contexts/app-context';
 import ApmtSteps from '../../components/ApmtSteps';
 import ReservationForm from './ReservationForm';
 
-function Contact() {
+function Contact({ id }) {
   const navigate = useNavigate();
   const ctx = useContext(AppContext);
 
   useEffect(() => {
     if (!ctx.selectedTime.slot || ctx.redirect) {
-      navigate('/date');
+      navigate(`/${id}/service`);
     }
-  }, [ctx.selectedTime.slot, navigate, ctx.redirect]);
+  }, [id, ctx.selectedTime.slot, navigate, ctx.redirect]);
 
   return (
     <section className="container landing">
       <section className="row">
         <aside className="col col-md-3 m-bottom--32 w-background-light display-desktop appointment-info font--small">
-          <ApmtSteps step="contact" />
+          <ApmtSteps id={id} step="contact" />
         </aside>
-        <ReservationForm />
+        <ReservationForm id={id} />
       </section>
     </section>
   );

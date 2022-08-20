@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AppContext from '../contexts/app-context';
 
-function Header(props) {
+function Header({ business }) {
   const ctx = useContext(AppContext);
   const path = useLocation();
 
@@ -19,21 +19,21 @@ function Header(props) {
     <div className="widget-header w-background-light">
       <header className="widget-bar m-bottom--8">
         <div className="widget-bar__main-content font--bold link--browser">
-          {path.pathname !== '/' && (
+          {path.pathname !== `/${business._id}` && (
             <div className="widget-bar__title-section">
               <div className="ember-view homepage-link-unless-embedded--inline">
-                <Link to="/">
+                <Link to={`/${business._id}`}>
                   <div className="merchant-header">
                     <div className="company-branding item-image-holder">
                       <div
                         className="item-image company-brading-picture"
                         style={{
-                          backgroundImage: `url(${props.avatar})`
+                          backgroundImage: `url(${business.avatar})`
                         }}
                       />
                     </div>
                     <h2 className="font--bold merchant-header__unit-title merchant-header__unit-name color--full-black">
-                      {props.name}
+                      {business.name}
                     </h2>
                   </div>
                 </Link>

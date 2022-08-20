@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '../components/UI/Button/Button';
 import AppContext from '../contexts/app-context';
 
-function ToolBar() {
+function ToolBar({ business }) {
   const ctx = useContext(AppContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,7 +21,7 @@ function ToolBar() {
   };
 
   const navigateHandler = () => {
-    navigate('/date');
+    navigate(`/${business._id}/date`);
     updateLocalStorage();
   };
 
@@ -32,20 +32,20 @@ function ToolBar() {
   return (
     <nav className="widget-toolbar-container">
       <div className="widget-toolbar-container__actions">
-        {location.pathname === '/service' && (
+        {location.pathname === `/${business._id}/service` && (
           <Button
             type="button"
             className="w-button w-button--small w-button--primary w-button--rounded 
           widget-toolbar-container__button widget-toolbar-container__button--continue 
           ember-view button button--is-disable"
-            disabled={!ctx.state}
+            disabled={ctx.selectedServices.length === 0}
             onClick={navigateHandler}
           >
             Continue
           </Button>
         )}
-        {(location.pathname === '/date' ||
-          location.pathname === '/contact') && (
+        {(location.pathname === `/${business._id}/date` ||
+          location.pathname === `/${business._id}/contact`) && (
           <Button
             type="button"
             className="w-button w-button--small w-button--secondary w-button--rounded 

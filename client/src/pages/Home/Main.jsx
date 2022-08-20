@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppContext from '../../contexts/app-context';
 
-function Main({ services }) {
+function Main({ business, services }) {
   const [arr, setArr] = useState([
     { id: 0, name: 'Services', isActive: true },
     { id: 1, name: 'Staff', isActive: false }
@@ -23,7 +23,7 @@ function Main({ services }) {
     if (!ctx.element.has(service._id)) {
       ctx.setSelectedServices('add', service);
     }
-    navigate('/service');
+    navigate(`/${business._id}/service`);
   };
 
   return (

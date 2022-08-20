@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../components/UI/Button/Button';
 
 function ApmtTime({
+  id,
   dateData,
   setDateData,
   isLoading,
@@ -114,7 +115,7 @@ function ApmtTime({
               slot: res.data.data.slot,
               lastAdd: Date.now()
             });
-            navigate('/contact');
+            navigate(`/${id}/contact`);
           } else {
             if (ctx.selectedTime.dateData) {
               ctx.setSelectedTime({});

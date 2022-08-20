@@ -58,7 +58,7 @@ const lastNameReducer = (state, action) => {
   return { value: '', isValid: false };
 };
 
-function ReservationForm() {
+function ReservationForm({ id }) {
   const ctx = useContext(AppContext);
   const Ref = useRef(null);
   const [timer, setTimer] = useState('00:00');
@@ -203,7 +203,7 @@ function ReservationForm() {
           ctx.setSelectedServices();
           ctx.setSelectedTime({});
           localStorage.removeItem('blinkk-esthetics-appointment');
-          navigate(`/reservation/${res.data.data.id}`);
+          navigate(`/${id}/reservation/${res.data.data.id}`);
         });
     } catch (err) {
       console.log(err);
