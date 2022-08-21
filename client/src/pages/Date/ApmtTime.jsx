@@ -115,7 +115,7 @@ function ApmtTime({
               slot: res.data.data.slot,
               lastAdd: Date.now()
             });
-            navigate(`/${id}/contact`);
+            navigate(`/book/${id}/contact`);
           } else {
             if (ctx.selectedTime.dateData) {
               ctx.setSelectedTime({});

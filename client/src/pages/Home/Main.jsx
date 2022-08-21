@@ -23,7 +23,7 @@ function Main({ business, services }) {
     if (!ctx.element.has(service._id)) {
       ctx.setSelectedServices('add', service);
     }
-    navigate(`/${business._id}/service`);
+    navigate(`/book/${business._id}/service`);
   };
 
   return (

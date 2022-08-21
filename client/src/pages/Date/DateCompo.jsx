@@ -24,7 +24,7 @@ function DateCompo({ id }) {
 
   useEffect(() => {
     if (ctx.selectedServices.length === 0) {
-      navigate(`/${id}/service`);
+      navigate(`/book/${id}/service`);
     }
   }, [id, ctx.selectedServices, navigate]);
 

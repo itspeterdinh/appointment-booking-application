@@ -10,7 +10,7 @@ function Contact({ id }) {
 
   useEffect(() => {
     if (!ctx.selectedTime.slot || ctx.redirect) {
-      navigate(`/${id}/service`);
+      navigate(`/book/${id}/service`);
     }
   }, [id, ctx.selectedTime.slot, navigate, ctx.redirect]);
 

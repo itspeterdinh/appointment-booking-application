@@ -10,7 +10,7 @@ root.render(
   <AppContextProvider>
     <Router>
       <Routes>
-        <Route path="/:businessid/*" element={<App />} />
+        <Route path="/book/:businessid/*" element={<App />} />
       </Routes>
     </Router>
   </AppContextProvider>

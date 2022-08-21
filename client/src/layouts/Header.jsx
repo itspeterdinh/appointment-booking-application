@@ -19,10 +19,10 @@ function Header({ business }) {
     <div className="widget-header w-background-light">
       <header className="widget-bar m-bottom--8">
         <div className="widget-bar__main-content font--bold link--browser">
-          {path.pathname !== `/${business._id}` && (
+          {path.pathname !== `/book/${business._id}` && (
             <div className="widget-bar__title-section">
               <div className="ember-view homepage-link-unless-embedded--inline">
-                <Link to={`/${business._id}`}>
+                <Link to={`/book/${business._id}`}>
                   <div className="merchant-header">
                     <div className="company-branding item-image-holder">
                       <div

@@ -21,7 +21,7 @@ function ToolBar({ business }) {
   };
 
   const navigateHandler = () => {
-    navigate(`/${business._id}/date`);
+    navigate(`/book/${business._id}/date`);
     updateLocalStorage();
   };
 
@@ -32,7 +32,7 @@ function ToolBar({ business }) {
   return (
     <nav className="widget-toolbar-container">
       <div className="widget-toolbar-container__actions">
-        {location.pathname === `/${business._id}/service` && (
+        {location.pathname === `/book/${business._id}/service` && (
           <Button
             type="button"
             className="w-button w-button--small w-button--primary w-button--rounded 
@@ -44,8 +44,8 @@ function ToolBar({ business }) {
             Continue
           </Button>
         )}
-        {(location.pathname === `/${business._id}/date` ||
-          location.pathname === `/${business._id}/contact`) && (
+        {(location.pathname === `/book/${business._id}/date` ||
+          location.pathname === `/book/${business._id}/contact`) && (
           <Button
             type="button"
             className="w-button w-button--small w-button--secondary w-button--rounded 
