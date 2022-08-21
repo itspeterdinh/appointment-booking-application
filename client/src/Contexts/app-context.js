@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 
 const AppContext = React.createContext({
-  state: false,
   element: Set,
   selectedServices: [],
   setSelectedServices: () => {},
@@ -17,7 +16,6 @@ const AppContext = React.createContext({
 });
 
 export const AppContextProvider = props => {
-  const [state, setState] = useState(false);
   const [redirect, setRedirect] = useState(true);
   const [error, setError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -84,19 +82,18 @@ export const AppContextProvider = props => {
     setUpLocalStorage();
   }, []);
 
-  useEffect(() => {
-    if (selectedServices.length > 0) {
-      setState(true);
-    } else {
-      setState(false);
-    }
-  }, [selectedServices]);
+  // useEffect(() => {
+  //   if (selectedServices.length > 0) {
+  //     setState(true);
+  //   } else {
+  //     setState(false);
+  //   }
+  // }, [selectedServices]);
 
   return (
     <AppContext.Provider
       value={{
         element,
-        state,
         selectedServices,
         setSelectedServices: handleSelectedServices,
         selectedTime,
