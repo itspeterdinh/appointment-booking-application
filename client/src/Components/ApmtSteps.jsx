@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import AppContext from '../contexts/app-context';
 import { Link } from 'react-router-dom';
 
-function ApmtSteps(props) {
+function ApmtSteps({ id, step }) {
   const ctx = useContext(AppContext);
 
   return (
@@ -10,7 +10,7 @@ function ApmtSteps(props) {
       <li
         className={
           'ember-view sidebar-section m-bottom--16 side-bar-section--service ' +
-          (props.step === 'service' && 'active')
+          (step === 'service' && 'active')
         }
       >
         <div className="font--bold m-bottom--16 link--browser">
@@ -19,13 +19,13 @@ function ApmtSteps(props) {
               <h5 className="sidebar-section-title sidebar-section-title--complete">
                 Services
               </h5>
-              {props.step !== 'service' && ' · '}
-              {props.step !== 'service' && (
+              {step !== 'service' && ' · '}
+              {step !== 'service' && (
                 <span
                   className="sidebar-multi-service-selection--selection 
                 sidebar-multi-service-selection--selection--edit"
                 >
-                  <Link to="/service">Edit</Link>
+                  <Link to={`/book/${id}/service`}>Edit</Link>
                 </span>
               )}
             </>
@@ -53,7 +53,7 @@ function ApmtSteps(props) {
       <li
         className={
           'ember-view sidebar-section m-bottom--16 side-bar-section--date ' +
-          (props.step === 'date' && 'active')
+          (step === 'date' && 'active')
         }
       >
         <div className="font--bold m-bottom--16 link--browser">
@@ -62,13 +62,13 @@ function ApmtSteps(props) {
               <h5 className="sidebar-section-title sidebar-section-title--complete">
                 Date and time
               </h5>
-              {props.step !== 'date' && ' · '}
-              {props.step !== 'date' && (
+              {step !== 'date' && ' · '}
+              {step !== 'date' && (
                 <span
                   className="sidebar-multi-service-selection--selection 
                 sidebar-multi-service-selection--selection--edit"
                 >
-                  <Link to="/date">Edit</Link>
+                  <Link to={`/book/${id}/date`}>Edit</Link>
                 </span>
               )}
             </>
@@ -87,7 +87,7 @@ function ApmtSteps(props) {
       <li
         className={
           'ember-view sidebar-section m-bottom--16 ' +
-          (props.step === 'contact' && 'active')
+          (step === 'contact' && 'active')
         }
       >
         <div className="font--bold m-bottom--16 link--browser">

@@ -203,7 +203,7 @@ function ReservationForm({ id }) {
           ctx.setSelectedServices();
           ctx.setSelectedTime({});
           localStorage.removeItem('blinkk-esthetics-appointment');
-          navigate(`/${id}/reservation/${res.data.data.id}`);
+          navigate(`/book/${id}/reservation/${res.data.data.id}`);
         });
     } catch (err) {
       console.log(err);
