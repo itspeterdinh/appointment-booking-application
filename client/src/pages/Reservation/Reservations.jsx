@@ -1,17 +1,18 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
+import Button from '../../components/UI/Button/Button';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
-function Reservation() {
+function Reservation({ id }) {
   const [reservation, setReservation] = useState({});
   const [isCancelled, setIsCancelled] = useState(false);
-  const { id } = useParams();
+  const { reservationId } = useParams();
 
   const fetchReservation = async () => {
     try {
-      await axios.get(`/reservation/${id}`).then(res => {
+      await axios.get(`/reservation/${reservationId}`).then(res => {
         setReservation(res.data.data.data);
         setIsCancelled(res.data.data.data.isCancelled);
       });
@@ -23,7 +24,7 @@ function Reservation() {
   const cancelAppointmentHandler = async () => {
     try {
       await axios
-        .post(`/reservation/cancel-appointment/${id}`, {
+        .post(`/reservation/cancel-appointment/${reservationId}`, {
           slot: reservation.slot
         })
         .then(res => {
@@ -47,6 +48,7 @@ function Reservation() {
         <div className="appointment">
           {reservation.date &&
             appointmentSection(
+              id,
               isCancelled,
               reservation,
               cancelAppointmentHandler
@@ -58,6 +60,7 @@ function Reservation() {
 }
 
 const appointmentSection = (
+  id,
   isCancelled,
   reservation,
   cancelAppointmentHandler
@@ -87,12 +90,14 @@ const appointmentSection = (
                 </p>
               </div>
               <div className="reservations-show__header-buttons">
-                <button
-                  className="w-button w-button--primary w-button--rounded w-button--small col-sm-7"
-                  type="button"
-                >
-                  Book another appointment
-                </button>
+                <Link to={`/book/${id}/service`}>
+                  <Button
+                    className="w-button w-button--primary w-button--rounded w-button--small col-sm-7"
+                    type="button"
+                  >
+                    Book another appointment
+                  </Button>
+                </Link>
               </div>
             </div>
           )}
@@ -140,20 +145,20 @@ const appointmentSection = (
               </div>
               <div className="reservations-show__actions m-bottom--32 link--browser">
                 <div className="m-bottom--16">
-                  <button
+                  <Button
                     className="w-button w-button--primary w-button--rounded w-button--small col-sm-8"
                     type="button"
                   >
                     Add to calendar
-                  </button>
+                  </Button>
                 </div>
                 <div className="m-bottom--32">
-                  <button
+                  <Button
                     className="w-button w-button--secondary w-button--rounded w-button--small col-sm-8"
                     type="button"
                   >
                     Share on Twitter
-                  </button>
+                  </Button>
                 </div>
                 <div className="link--browser m-bottom--12">
                   <a className="font--bold" href="#">
@@ -161,21 +166,23 @@ const appointmentSection = (
                   </a>
                 </div>
                 <div className="link--browser m-bottom--12">
-                  <button
+                  <Button
                     className="w-button w-button--text w-button--rounded w-button--large col-sm-8"
                     type="button"
                     onClick={cancelAppointmentHandler}
                   >
                     Cancel appointment
-                  </button>
+                  </Button>
                 </div>
                 <div className="link--browser">
-                  <button
-                    className="w-button w-button--text w-button--rounded w-button--large col-sm-8"
-                    type="button"
-                  >
-                    Book another appointment
-                  </button>
+                  <Link to={`/book/${id}/service`}>
+                    <Button
+                      className="w-button w-button--text w-button--rounded w-button--large col-sm-8"
+                      type="button"
+                    >
+                      Book another appointment
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </div>

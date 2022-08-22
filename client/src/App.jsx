@@ -72,7 +72,7 @@ function App() {
                   element={<Contact id={business._id} />}
                 />
                 <Route
-                  path="/reservation/:id"
+                  path="/reservation/:reservationId"
                   element={<Reservation id={business._id} />}
                 />
               </Route>
