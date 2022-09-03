@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server.js",
     "start:prod": "NODE_ENV=production nodemon server.js",
-    "dev": "concurrently \"npm start\" \"cd client && npm start\""
+    "dev": "concurrently \"npm start\" \"cd client && npm start\"",
+    "dev-1": "cd client && npm start"
   },
   "author": "ACK",
   "license": "ISC",
